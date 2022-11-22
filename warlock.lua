@@ -194,23 +194,23 @@ function ConRO.Warlock.Under10Def(_, timeShift, currentSpell, gcd)
 
 --Rotations	
 	if _CreateHealthstone_RDY and not _in_combat and _Healthstone_COUNT <= 0 then
-		tinsert(ConRO.SuggestedSpells, _CreateHealthstone);
+		tinsert(ConRO.SuggestedDefSpells, _CreateHealthstone);
 	end
 
 	if _DrainLife_RDY and _Player_Percent_Health <= 80 then
-		tinsert(ConRO.SuggestedSpells, _DrainLife);
+		tinsert(ConRO.SuggestedDefSpells, _DrainLife);
 	end
 
 	if _HealthFunnel_RDY and _Pet_summoned and _Pet_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _HealthFunnel);
+		tinsert(ConRO.SuggestedDefSpells, _HealthFunnel);
 	end
 
 	if _Healthstone_RDY and _Player_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _Healthstone);
+		tinsert(ConRO.SuggestedDefSpells, _Healthstone);
 	end
 
 	if _UnendingResolve_RDY then
-		tinsert(ConRO.SuggestedSpells, _UnendingResolve);
+		tinsert(ConRO.SuggestedDefSpells, _UnendingResolve);
 	end
 return nil;
 end
@@ -446,31 +446,31 @@ function ConRO.Warlock.AfflictionDef(_, timeShift, currentSpell, gcd, tChosen, p
 
 --Rotations
 	if _CreateHealthstone_RDY and not _in_combat and _Healthstone_COUNT <= 0 then
-		tinsert(ConRO.SuggestedSpells, _CreateHealthstone);
+		tinsert(ConRO.SuggestedDefSpells, _CreateHealthstone);
 	end
 
 	if _DrainLife_RDY and _Player_Percent_Health <= 60 or (_Player_Percent_Health <= 80 and (_InevitableDemise_COUNT >= 50 or _InevitableDemise_DUR <= 3)) then
-		tinsert(ConRO.SuggestedSpells, _DrainLife);
+		tinsert(ConRO.SuggestedDefSpells, _DrainLife);
 	end
 
 	if _MortalCoil_RDY and _Player_Percent_Health <= 80 then
-		tinsert(ConRO.SuggestedSpells, _MortalCoil);
+		tinsert(ConRO.SuggestedDefSpells, _MortalCoil);
 	end
 
 	if _HealthFunnel_RDY and _Pet_summoned and _Pet_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _HealthFunnel);
+		tinsert(ConRO.SuggestedDefSpells, _HealthFunnel);
 	end
 
 	if _Healthstone_RDY and _Player_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _Healthstone);
+		tinsert(ConRO.SuggestedDefSpells, _Healthstone);
 	end
 
 	if _DarkPact_RDY then
-		tinsert(ConRO.SuggestedSpells, _DarkPact);
+		tinsert(ConRO.SuggestedDefSpells, _DarkPact);
 	end
 
 	if _UnendingResolve_RDY then
-		tinsert(ConRO.SuggestedSpells, _UnendingResolve);
+		tinsert(ConRO.SuggestedDefSpells, _UnendingResolve);
 	end
 	return nil;
 end
@@ -759,31 +759,31 @@ function ConRO.Warlock.DemonologyDef(_, timeShift, currentSpell, gcd, tChosen, p
 
 --Rotations	
 	if _CreateHealthstone_RDY and not _in_combat and _Healthstone_COUNT <= 0 then
-		tinsert(ConRO.SuggestedSpells, _CreateHealthstone);
+		tinsert(ConRO.SuggestedDefSpells, _CreateHealthstone);
 	end
 
 	if _DrainLife_RDY and _Player_Percent_Health <= 60 then
-		tinsert(ConRO.SuggestedSpells, _DrainLife);
+		tinsert(ConRO.SuggestedDefSpells, _DrainLife);
 	end
 
 	if _MortalCoil_RDY and _Player_Percent_Health <= 80 then
-		tinsert(ConRO.SuggestedSpells, _MortalCoil);
+		tinsert(ConRO.SuggestedDefSpells, _MortalCoil);
 	end
 
 	if _HealthFunnel_RDY and _Pet_summoned and _Pet_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _HealthFunnel);
+		tinsert(ConRO.SuggestedDefSpells, _HealthFunnel);
 	end
 
 	if _Healthstone_RDY and _Player_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _Healthstone);
+		tinsert(ConRO.SuggestedDefSpells, _Healthstone);
 	end
 
 	if _DarkPact_RDY then
-		tinsert(ConRO.SuggestedSpells, _DarkPact);
+		tinsert(ConRO.SuggestedDefSpells, _DarkPact);
 	end
 
 	if _UnendingResolve_RDY then
-		tinsert(ConRO.SuggestedSpells, _UnendingResolve);
+		tinsert(ConRO.SuggestedDefSpells, _UnendingResolve);
 	end
 	return nil;
 end
@@ -816,7 +816,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	local _ChaosBolt, _ChaosBolt_RDY					 												= ConRO:AbilityReady(Ability.ChaosBolt, timeShift);
 		local _Eradication_DEBUFF																			=ConRO:TargetAura(Debuff.Eradication, timeShift);
 	local _Conflagrate, _Conflagrate_RDY								 								= ConRO:AbilityReady(Ability.Conflagrate, timeShift);
-		local _Conflagrate_CHARGES																			= ConRO:SpellCharges(Ability.Conflagrate);
+		local _Conflagrate_CHARGES																			= ConRO:SpellCharges(_Conflagrate);
 		local _Conflagrate_BUFF																				= ConRO:Aura(Buff.Conflagrate, timeShift);
 		local _BackDraft_BUFF, _BackDraft_COUNT																= ConRO:Aura(Buff.BackDraft, timeShift);
 	local _Havoc, _Havoc_RDY, _Havoc_CD																	= ConRO:AbilityReady(Ability.Havoc, timeShift);
@@ -1001,31 +1001,31 @@ function ConRO.Warlock.DestructionDef(_, timeShift, currentSpell, gcd, tChosen, 
 
 --Rotations	
 	if _CreateHealthstone_RDY and not _in_combat and _Healthstone_COUNT <= 0 then
-		tinsert(ConRO.SuggestedSpells, _CreateHealthstone);
+		tinsert(ConRO.SuggestedDefSpells, _CreateHealthstone);
 	end
 
 	if _DrainLife_RDY and _Player_Percent_Health <= 60 then
-		tinsert(ConRO.SuggestedSpells, _DrainLife);
+		tinsert(ConRO.SuggestedDefSpells, _DrainLife);
 	end
 
 	if _MortalCoil_RDY and _Player_Percent_Health <= 80 then
-		tinsert(ConRO.SuggestedSpells, _MortalCoil);
+		tinsert(ConRO.SuggestedDefSpells, _MortalCoil);
 	end
 
 	if _HealthFunnel_RDY and _Pet_summoned and _Pet_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _HealthFunnel);
+		tinsert(ConRO.SuggestedDefSpells, _HealthFunnel);
 	end
 
 	if _Healthstone_RDY and _Player_Percent_Health <= 50 then
-		tinsert(ConRO.SuggestedSpells, _Healthstone);
+		tinsert(ConRO.SuggestedDefSpells, _Healthstone);
 	end
 
 	if _DarkPact_RDY then
-		tinsert(ConRO.SuggestedSpells, _DarkPact);
+		tinsert(ConRO.SuggestedDefSpells, _DarkPact);
 	end
 
 	if _UnendingResolve_RDY then
-		tinsert(ConRO.SuggestedSpells, _UnendingResolve);
+		tinsert(ConRO.SuggestedDefSpells, _UnendingResolve);
 	end
 	return nil;
 end
