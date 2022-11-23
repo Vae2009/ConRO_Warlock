@@ -559,9 +559,9 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 
 	ConRO:AbilityBurst(_DemonicStrength, _DemonicStrength_RDY and _Felstorm_CD <= 25 and ConRO:BurstMode(_DemonicStrength));
 	ConRO:AbilityBurst(_GrimoireFelguard, _GrimoireFelguard_RDY and _SoulShards >= 1 and ConRO:BurstMode(_GrimoireFelguard));
-	ConRO:AbilityBurst(_NetherPortal, _NetherPortal_RDY and _SummonDemonicTyrant_RDY and _CallDreadstalkers_RDY and (svilefiend or not tChosen[ids.Demo_Talent.SummonVilefiend]) and _SoulShards >= 1 and currentSpell ~= ids.Demo_Talent.NetherPortal and ConRO:BurstMode(_NetherPortal));
+	ConRO:AbilityBurst(_NetherPortal, _NetherPortal_RDY and _SummonDemonicTyrant_RDY and _CallDreadstalkers_RDY and (svilefiend or not tChosen[Ability.SummonVilefiend.talentID]) and _SoulShards >= 1 and currentSpell ~= _NetherPortal and ConRO:BurstMode(_NetherPortal));
 	ConRO:AbilityBurst(_SummonDemonicTyrant, _SummonDemonicTyrant_RDY and currentSpell ~= _SummonDemonicTyrant and _CallDreadstalkers_CD >= 10 and ConRO:ImpsOut() >= 6 and ConRO:BurstMode(_SummonDemonicTyrant));
-	ConRO:AbilityBurst(_SummonVilefiend, _SummonVilefiend_RDY and _SoulShards >= 1 and ((_SummonDemonicTyrant_RDY and (_CallDreadstalkers_RDY or _CallDreadstalkers_CD >= 16)) or _SummonDemonicTyrant_CD >= 40) and currentSpell ~= _SummonVilefiend and (not tChosen[ids.Demo_Talent.NetherPortal] or (tChosen[ids.Demo_Talent.NetherPortal] and _NetherPortal_CD > 40)) and ConRO:BurstMode(_SummonVilefiend));
+	ConRO:AbilityBurst(_SummonVilefiend, _SummonVilefiend_RDY and _SoulShards >= 1 and ((_SummonDemonicTyrant_RDY and (_CallDreadstalkers_RDY or _CallDreadstalkers_CD >= 16)) or _SummonDemonicTyrant_CD >= 40) and currentSpell ~= _SummonVilefiend and (not tChosen[Ability.NetherPortal.talentID] or (tChosen[Ability.NetherPortal.talentID] and _NetherPortal_CD > 40)) and ConRO:BurstMode(_SummonVilefiend));
 
 --Warnings
 	ConRO:Warnings("Summon your Felguard!", not _Pet_summoned);
@@ -612,7 +612,7 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	end
 
 	if _NetherPortal_RDY and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD <= 9) and currentSpell ~= _NetherPortal and ConRO:FullMode(_NetherPortal) then
-		if _NetherPortal_RDY and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD <= 9) and _CallDreadstalkers_RDY and (not tChosen[ids.Demo_Talent.SummonVilefiend] or _SummonVilefiend_RDY) and _SoulShards >= 5 and currentSpell ~= _NetherPortal then
+		if _NetherPortal_RDY and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD <= 9) and _CallDreadstalkers_RDY and (not tChosen[Ability.SummonVilefiend.talentID] or _SummonVilefiend_RDY) and _SoulShards >= 5 and currentSpell ~= _NetherPortal then
 			tinsert(ConRO.SuggestedSpells, _NetherPortal);
 		end
 
@@ -688,11 +688,11 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 			tinsert(ConRO.SuggestedSpells, _Implosion);
 		end
 
-		if _SummonVilefiend_RDY and _SoulShards >= 1 and ((_SummonDemonicTyrant_RDY and (_CallDreadstalkers_RDY or _CallDreadstalkers_CD >= 16)) or _SummonDemonicTyrant_CD >= 40) and currentSpell ~= _SummonVilefiend and (not tChosen[ids.Demo_Talent.NetherPortal] or (tChosen[ids.Demo_Talent.NetherPortal] and (_NetherPortal_CD > 40 or ConRO:BurstMode(_NetherPortal)))) and ConRO:FullMode(_SummonVilefiend) then
+		if _SummonVilefiend_RDY and _SoulShards >= 1 and ((_SummonDemonicTyrant_RDY and (_CallDreadstalkers_RDY or _CallDreadstalkers_CD >= 16)) or _SummonDemonicTyrant_CD >= 40) and currentSpell ~= _SummonVilefiend and (not tChosen[Ability.NetherPortal.talentID] or (tChosen[Ability.NetherPortal.talentID] and (_NetherPortal_CD > 40 or ConRO:BurstMode(_NetherPortal)))) and ConRO:FullMode(_SummonVilefiend) then
 			tinsert(ConRO.SuggestedSpells, _SummonVilefiend);
 		end
 
-		if _CallDreadstalkers_RDY and (_SoulShards >= 2 or _DemonicCalling_BUFF) and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD >= 10) and currentSpell ~= ids.Demo_Ability.CallDreadstalkers and (not tChosen[ids.Demo_Talent.NetherPortal] or (tChosen[ids.Demo_Talent.NetherPortal] and (_NetherPortal_CD > 15 or ConRO:BurstMode(_NetherPortal)))) then
+		if _CallDreadstalkers_RDY and (_SoulShards >= 2 or _DemonicCalling_BUFF) and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD >= 10) and currentSpell ~= _CallDreadstalkers and (not tChosen[Ability.NetherPortal.talentID] or (tChosen[Ability.NetherPortal.talentID] and (_NetherPortal_CD > 15 or ConRO:BurstMode(_NetherPortal)))) then
 			tinsert(ConRO.SuggestedSpells, _CallDreadstalkers);
 		end
 
