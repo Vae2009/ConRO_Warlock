@@ -29,7 +29,7 @@ local ConRO_Warlock, ids = ...;
 	}
 	ids.Warlock_Debuff = {
 		Corruption = 146739,
-	}	
+	}
 
 --Affliction
 	ids.Aff_Ability = {
@@ -194,7 +194,9 @@ local ConRO_Warlock, ids = ...;
 		Agony = 980,
 		Corruption = 146739,
 		DrainSoul = 198590,
+		DreadTouch = 389868,
 		Haunt = 48181,
+		MaleficAffliction = 389845,
 		PhantomSingularity = 205179,
 		SeedofCorruption = 27243,
 		ShadowEmbrace = 32390,
