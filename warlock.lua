@@ -630,7 +630,7 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	end
 
 	if _NetherPortal_BUFF or currentSpell == _NetherPortal then
-		if _SummonDemonicTyrant_RDY and (ConRO.lastSpellId == _HandofGuldan or currentSpell == _HandofGuldan) then
+		if _SummonDemonicTyrant_RDY and (ConRO.lastSpellId == _HandofGuldan or currentSpell == _HandofGuldan) and ConRO:FullMode(_SummonDemonicTyrant) then
 			tinsert(ConRO.SuggestedSpells, _SummonDemonicTyrant);
 		end
 
@@ -638,7 +638,7 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 			tinsert(ConRO.SuggestedSpells, _BilescourgeBombers);
 		end
 
-		if _GrimoireFelguard_RDY and _SoulShards >= 1 then
+		if _GrimoireFelguard_RDY and _SoulShards >= 1 and ConRO:FullMode(_GrimoireFelguard) then
 			tinsert(ConRO.SuggestedSpells, _GrimoireFelguard);
 		end
 
@@ -662,7 +662,7 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 			tinsert(ConRO.SuggestedSpells, _ShadowBolt);
 		end
 	else
-		if _NetherPortal_RDY and currentSpell ~= _NetherPortal then
+		if _NetherPortal_RDY and currentSpell ~= _NetherPortal and ConRO:FullMode(_NetherPortal) then
 			tinsert(ConRO.SuggestedSpells, _NetherPortal);
 			_NetherPortal_RDY = false;
 		end
