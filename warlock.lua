@@ -255,8 +255,10 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	local _SoulRot, _SoulRot_RDY																		= ConRO:AbilityReady(Ability.SoulRot, timeShift);
 	local _SummonDarkglare, _SummonDarkglare_RDY, _SummonDarkglare_CD									= ConRO:AbilityReady(Ability.SummonDarkglare, timeShift);
 	local _SummonFelhunter, _SummonFelhunter_RDY														= ConRO:AbilityReady(Ability.SummonDemon.Felhunter, timeShift);
-	local _UnstableAffliction, _UnstableAffliction_RDY													= ConRO:AbilityReady(Ability.UnstableAffliction, timeShift);
-		local _UnstableAffliction_DEBUFF, _, _UnstableAffliction_DUR										= ConRO:TargetAura(Debuff.UnstableAffliction, timeShift);
+	local _UnstableAffliction, _UnstableAffliction_RDY = ConRO:AbilityReady(Ability.UnstableAffliction, timeShift);
+	local _UnstableAfflictionRA, _UnstableAfflictionRA_RDY = ConRO:AbilityReady(PvPTalent.UnstableAfflictionRA, timeShift, 'pvp');
+		local _UnstableAffliction_DEBUFF, _, _UnstableAffliction_DUR = ConRO:TargetAura(Debuff.UnstableAffliction, timeShift);
+		local _UnstableAfflictionRA_DEBUFF, _, _UnstableAfflictionRA_DUR = ConRO:TargetAura(Debuff.UnstableAfflictionRA, timeShift);
 
 	local _SpellLock, _SpellLock_RDY																	= ConRO:AbilityReady(PetAbility.SpellLock, timeShift, 'pet');
 	local _DevourMagic, _DevourMagic_RDY																= ConRO:AbilityReady(PetAbility.DevourMagic, timeShift, 'pet');
@@ -304,6 +306,13 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	if currentSpell == _ShadowBolt then
 		_ShadowEmbrace_COUNT = _ShadowEmbrace_COUNT + 1;
 	end
+
+	if _is_PvP then
+		if pvpChosen[PvPTalent.RampantAfflictions.spellID] then
+			_UnstableAffliction, _UnstableAffliction_RDY, _UnstableAffliction_DEBUFF, _UnstableAffliction_DUR = _UnstableAfflictionRA, _UnstableAfflictionRA_RDY, _UnstableAfflictionRA_DEBUFF, _UnstableAfflictionRA_DUR;
+		end
+	end
+
 
 --Indicators
 	ConRO:AbilityInterrupt(_CommandDemon_SpellLock, _SpellLock_RDY and ConRO:Interrupt());

@@ -168,18 +168,18 @@ local ConRO_Warlock, ids = ...;
 	}
 
 	ids.Aff_PvPTalent = {
-		BaneofFragility = 199954,
-		Deathbolt = 264106,
-		GatewayMastery = 248855,
-		RotandDecay = 212371,
-		BaneofShadows = 234877,
-		NetherWard = 212295,
-		EssenceDrain = 221711,
-		CastingCircle = 221703,
-		DemonArmor = 285933,
-		AmplifyCurse = 328774,
-		RampantAfflictions = 335052,
-			UnstableAffliction_RampantAfflictions = 342938,
+		BaneofFragility = {spellID = 199954},
+		Deathbolt = {spellID = 264106},
+		GatewayMastery = {spellID = 248855},
+		RotandDecay = {spellID = 212371},
+		BaneofShadows = {spellID = 234877},
+		NetherWard = {spellID = 212295},
+		EssenceDrain = {spellID = 221711},
+		CastingCircle = {spellID = 221703},
+		DemonArmor = {spellID = 285933},
+		AmplifyCurse = {spellID = 328774},
+		RampantAfflictions = {spellID = 335052},
+			UnstableAfflictionRA = {spellID = 342938, talentID = 335052},
 	}
 	ids.Aff_Form = {
 	
@@ -202,7 +202,7 @@ local ConRO_Warlock, ids = ...;
 		ShadowEmbrace = 32390,
 		SiphonLife = 63106,
 		UnstableAffliction = 316099,
-		UnstableAffliction_RampantAfflictions = 342938,
+		UnstableAfflictionRA = 342938,
 		VileTaint = 278350,
 	}
 	ids.Aff_PetAbility = {
