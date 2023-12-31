@@ -374,7 +374,7 @@ local ConRO_Warlock, ids = ...;
 		CastingCircle = 221703,
 	}
 	ids.Demo_Form = {
-	
+
 	}
 	ids.Demo_Buff = {
 		BurningRush = 111400,
