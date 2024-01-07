@@ -941,7 +941,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_SoulShards = _SoulShards + 0.3;
 		end
 
-		if _Shadowburn_RDY and _Shadowburn_CHARGES > 1 and _is_moving then
+		if _Shadowburn_RDY and _Shadowburn_CHARGES > 1 and (_is_moving or ConRO:GetTimeToDie() <= 5) then
 			tinsert(ConRO.SuggestedSpells, _Shadowburn);
 			_Shadowburn_CHARGES = _Shadowburn_CHARGES - 1;
 			_SoulShards = _SoulShards - 1;
