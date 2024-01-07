@@ -556,9 +556,6 @@ local ConRO_Warlock, ids = ...;
 		DarkSoulInstability = 113858,
 		GrimoireofSacrifice = 196099,
 		InquisitorsGaze = 388068,
-		MadnessoftheAzjAqirCB = 387409,
-		MadnessoftheAzjAqirRoF = 387413,
-		MadnessoftheAzjAqirSB = 387414,
 		RitualofRuin = 387157,
  	}
 	ids.Dest_Debuff = {

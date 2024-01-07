@@ -107,6 +107,7 @@ end
 
 --Info
 local _Player_Level = UnitLevel("player");
+local _Player_Intellect = UnitStat("player", 4);
 local _Player_Percent_Health = ConRO:PercentHealth('player');
 local _is_PvP = ConRO:IsPvP();
 local _in_combat = UnitAffectingCombat('player');
@@ -140,6 +141,7 @@ local _Cannibalize, _Cannibalize_RDY = _, _;
 
 function ConRO:Stats()
 	_Player_Level = UnitLevel("player");
+	_Player_Intellect = UnitStat("player", 4);
 	_Player_Percent_Health = ConRO:PercentHealth('player');
 	_is_PvP = ConRO:IsPvP();
 	_in_combat = UnitAffectingCombat('player');
@@ -755,14 +757,13 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	local _ChannelDemonfire, _ChannelDemonfire_RDY = ConRO:AbilityReady(Ability.ChannelDemonfire, timeShift);
 	local _ChaosBolt, _ChaosBolt_RDY = ConRO:AbilityReady(Ability.ChaosBolt, timeShift);
 		local _Eradication_DEBUFF =ConRO:TargetAura(Debuff.Eradication, timeShift);
-		local _MadnessoftheAzjAqirCB_BUFF = ConRO:Aura(Buff.MadnessoftheAzjAqirCB, timeShift);
 		local _RitualofRuin_BUFF = ConRO:Aura(Buff.RitualofRuin, timeShift);
 	local _Conflagrate, _Conflagrate_RDY = ConRO:AbilityReady(Ability.Conflagrate, timeShift);
-		local _Conflagrate_CHARGES = ConRO:SpellCharges(_Conflagrate);
-		local _Conflagrate_BUFF = ConRO:Aura(Buff.Conflagrate, timeShift);
+		local _Conflagrate_CHARGES, _Conflagrate_MaxCHARGES, _Conflagrate_CCD = ConRO:SpellCharges(_Conflagrate);
+		local _Conflagrate_DEBUFF = ConRO:TargetAura(Debuff.Conflagrate, timeShift);
 		local _BackDraft_BUFF, _BackDraft_COUNT = ConRO:Aura(Buff.BackDraft, timeShift);
 	local _DimensionalRift, _DimensionalRift_RDY = ConRO:AbilityReady(Ability.DimensionalRift, timeShift);
-		local _DimensionalRift_CHARGES = ConRO:SpellCharges(_DimensionalRift);
+		local _DimensionalRift_CHARGES, _DimensionalRift_MaxCHARGES, _DimensionalRift_CCD = ConRO:SpellCharges(_DimensionalRift);
 	local _GrimoireofSacrifice, _GrimoireofSacrifice_RDY = ConRO:AbilityReady(Ability.GrimoireofSacrifice, timeShift);
 		local _GrimoireofSacrifice_BUFF = ConRO:Aura(Buff.GrimoireofSacrifice, timeShift);
 	local _Havoc, _Havoc_RDY, _Havoc_CD = ConRO:AbilityReady(Ability.Havoc, timeShift);
@@ -772,9 +773,8 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 		local _Immolate_DEBUFF = ConRO:TargetAura(Debuff.Immolate, timeShift + 3);
 	local _Incinerate, _Incinerate_RDY = ConRO:AbilityReady(Ability.Incinerate, timeShift);
 	local _RainofFire, _RainofFire_RDY = ConRO:AbilityReady(Ability.RainofFire, timeShift);
-		local _MadnessoftheAzjAqirRoF_BUFF = ConRO:Aura(Buff.MadnessoftheAzjAqirRoF, timeShift);
 	local _Shadowburn, _Shadowburn_RDY = ConRO:AbilityReady(Ability.Shadowburn, timeShift);
-		local _MadnessoftheAzjAqirSB_BUFF = ConRO:Aura(Buff.MadnessoftheAzjAqirSB, timeShift);
+		local _Shadowburn_CHARGES = ConRO:SpellCharges(_Shadowburn);
 	local _SoulFire, _SoulFire_RDY = ConRO:AbilityReady(Ability.SoulFire, timeShift);
 	local _SummonInfernal, _SummonInfernal_RDY, _SummonInfernal_CD = ConRO:AbilityReady(Ability.SummonInfernal, timeShift);
 	local _SummonImp, _SummonImp_RDY = ConRO:AbilityReady(Ability.SummonDemon.Imp, timeShift);
@@ -789,10 +789,13 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 
 	if currentSpell == _ChaosBolt then
 		_SoulShards = _SoulShards - 2;
+		_BackDraft_COUNT = _BackDraft_COUNT - 1;
 	elseif currentSpell == _Incinerate then
 		_SoulShards = _SoulShards + 0.2;
+		_BackDraft_COUNT = _BackDraft_COUNT - 1;
 	elseif currentSpell == _SoulFire then
 		_SoulShards = _SoulShards + 1;
+		_BackDraft_COUNT = _BackDraft_COUNT - 1;
 	end
 
 --Indicators
@@ -801,7 +804,6 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	ConRO:AbilityPurge(_DevourMagic, _DevourMagic_RDY and ConRO:Purgable());
 	ConRO:AbilityPurge(_ArcaneTorrent, _ArcaneTorrent_RDY and _target_in_melee and ConRO:Purgable());
 
-	ConRO:AbilityBurst(_SoulFire, _SoulFire_RDY and _SoulShards <= 4 and currentSpell ~= _SoulFire and _in_combat and ConRO:BurstMode(_SoulFire));
 	ConRO:AbilityBurst(_SummonInfernal, _SummonInfernal_RDY and _in_combat and ConRO:BurstMode(_SummonInfernal));
 	ConRO:AbilityBurst(_GrimoireofSacrifice, _GrimoireofSacrifice_RDY and not _GrimoireofSacrifice_BUFF);
 
@@ -810,59 +812,85 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	ConRO:Warnings("Summon your demon!", not tChosen[Ability.GrimoireofSacrifice.talentID] and not _Pet_summoned);
 
 --Rotations
-	if not _in_combat then
-		if _Incinerate_RDY and currentSpell ~= _Incinerate and currentSpell ~= _SoulFire then
-			tinsert(ConRO.SuggestedSpells, _Incinerate);
-			_Incinerate_RDY = false;
+	for i = 1, 2, 1 do
+		if not _in_combat then
+			if _SoulFire_RDY and not _Immolate_DEBUFF and currentSpell ~= _SoulFire and ConRO:FullMode(_SoulFire) then
+				tinsert(ConRO.SuggestedSpells, _SoulFire);
+				_SoulFire_RDY = false;
+				_Immolate_DEBUFF = true;
+				_SoulShards = _SoulShards + 1;
+				_BackDraft_COUNT = _BackDraft_COUNT - 1;
+			end
+
+			if _Cataclysm_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and not _is_moving then
+				tinsert(ConRO.SuggestedSpells, _Cataclysm);
+				_Cataclysm_RDY = false;
+				_Immolate_DEBUFF = true;
+			end
+
+			if _Immolate_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate then
+				tinsert(ConRO.SuggestedSpells, _Immolate);
+				_Immolate_RDY = false;
+				_Immolate_DEBUFF = true;
+			end
+
+			if _DimensionalRift_RDY then
+				tinsert(ConRO.SuggestedSpells, _DimensionalRift);
+				_DimensionalRift_CHARGES = _DimensionalRift_CHARGES - 1;
+				_SoulShards = _SoulShards + 0.3;
+			end
+
+			if _SummonInfernal_RDY and ConRO:FullMode(_SummonInfernal) then
+				tinsert(ConRO.SuggestedSpells, _SummonInfernal);
+				_SummonInfernal_RDY = false;
+			end
+
+			if _Incinerate_RDY then
+				tinsert(ConRO.SuggestedSpells, _Incinerate);
+				if tChosen[Ability.DiabolicEmbers.talentID] then
+					_SoulShards = _SoulShards + 0.4;
+				else
+					_SoulShards = _SoulShards + 0.2;
+				end
+				_BackDraft_COUNT = _BackDraft_COUNT - 1;
+			end
 		end
 
-		if _Cataclysm_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and currentSpell ~= _SoulFire then
-			tinsert(ConRO.SuggestedSpells, _Cataclysm);
-			_Cataclysm_RDY = false;
+		if (ConRO_AutoButton:IsVisible() and (_enemies_in_40yrds >= 5 or (_enemies_in_40yrds >= 3 and not _Havoc_DEBUFF))) or ConRO_AoEButton:IsVisible() then
+			if _RainofFire_RDY and (_SoulShards >= 4.5 or _RitualofRuin_BUFF) then
+				tinsert(ConRO.SuggestedSpells, _RainofFire);
+				if not _RitualofRuin_BUFF then
+					_SoulShards = _SoulShards - 3
+				end
+			end
+		else
+			if _ChaosBolt_RDY and _SoulShards >= 4.5 and currentSpell ~= _ChaosBolt and not _is_moving then
+				tinsert(ConRO.SuggestedSpells, _ChaosBolt);
+				if not _RitualofRuin_BUFF then
+					_SoulShards = _SoulShards - 2;
+				end
+				_BackDraft_COUNT = _BackDraft_COUNT - 1;
+			end
 		end
 
-		if _Immolate_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and currentSpell ~= _SoulFire then
-			tinsert(ConRO.SuggestedSpells, _Immolate);
-			_Immolate_RDY = false;
-		end
-
-		if _Conflagrate_RDY and _SoulShards <= 4 then
-			tinsert(ConRO.SuggestedSpells, _Conflagrate);
-			_Conflagrate_RDY = false;
-		end
-
-		if _SoulFire_RDY and currentSpell ~= _SoulFire and ConRO:FullMode(_SoulFire) then
+		if _SoulFire_RDY and _SoulShards <= 3.5 and _Conflagrate_DEBUFF and _BackDraft_COUNT >= 1 and currentSpell ~= _SoulFire and ConRO:FullMode(_SoulFire) then
 			tinsert(ConRO.SuggestedSpells, _SoulFire);
 			_SoulFire_RDY = false;
-		end
-	else
-		if _ChaosBolt_RDY and (_SoulShards >= 2 or _RitualofRuin_BUFF) and _MadnessoftheAzjAqirCB_BUFF and currentSpell ~= _ChaosBolt then
-			tinsert(ConRO.SuggestedSpells, _ChaosBolt);
-			if not _RitualofRuin_BUFF then
-				_SoulShards = _SoulShards - 2
-			end
+			_Immolate_DEBUFF = true;
+			_SoulShards = _SoulShards + 1;
+			_BackDraft_COUNT = _BackDraft_COUNT - 1;
 		end
 
-		if _RainofFire_RDY and (_SoulShards >= 3 or _RitualofRuin_BUFF) and _MadnessoftheAzjAqirRoF_BUFF then
-			tinsert(ConRO.SuggestedSpells, _RainofFire);
-			if not _RitualofRuin_BUFF then
-				_SoulShards = _SoulShards - 3
-			end
-		end
-
-		if _Shadowburn_RDY and _SoulShards >= 1 and _MadnessoftheAzjAqirSB_BUFF then
-			tinsert(ConRO.SuggestedSpells, _Shadowburn);
-			_SoulShards = _SoulShards - 1
-		end
-
-		if _Cataclysm_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate then
+		if _Cataclysm_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and not _is_moving then
 			tinsert(ConRO.SuggestedSpells, _Cataclysm);
 			_Cataclysm_RDY = false;
+			_Immolate_DEBUFF = true;
 		end
 
 		if _Immolate_RDY and not _Immolate_DEBUFF and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate then
 			tinsert(ConRO.SuggestedSpells, _Immolate);
 			_Immolate_RDY = false;
+			_Immolate_DEBUFF = true;
 		end
 
 		if _SummonInfernal_RDY and ConRO:FullMode(_SummonInfernal) then
@@ -870,23 +898,13 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_SummonInfernal_RDY = false;
 		end
 
-		if _Berserking_RDY and _SummonInfernal_CD <= 170 then
-			tinsert(ConRO.SuggestedSpells, _Berserking);
-			_Berserking_RDY = false;
+		if _Conflagrate_RDY and (_Conflagrate_CHARGES >= _Conflagrate_MaxCHARGES or (_Conflagrate_CHARGES >= _Conflagrate_MaxCHARGES - 1 and _Conflagrate_CCD <= 1)) then
+			tinsert(ConRO.SuggestedSpells, _Conflagrate);
+			_Conflagrate_CHARGES = _Conflagrate_CHARGES - 1;
+			_SoulShards = _SoulShards + 0.5;
 		end
 
-		if _DimensionalRift_RDY and _DimensionalRift_CHARGES >= 1 and ConRO.lastSpellId ~= _DimensionalRift and ConRO:FullMode(_DimensionalRift) then
-			tinsert(ConRO.SuggestedSpells, _DimensionalRift);
-			_DimensionalRift_CHARGES = _DimensionalRift_CHARGES - 1;
-		end
-
-		if _RainofFire_RDY and _SoulShards >= 3 and (ConRO_AutoButton:IsVisible() and ((_enemies_in_40yrds >= 5 and _Havoc_DEBUFF) or (_enemies_in_40yrds >= 3 and not _Havoc_DEBUFF))) then
-			tinsert(ConRO.SuggestedSpells, _RainofFire);
-			_RainofFire_RDY = false;
-			_SoulShards = _SoulShards - 3;
-		end
-
-		if _SummonSoulkeeper_RDY and _SummonSoulkeeper_Count >= 10 and (ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 3) then
+		if _SummonSoulkeeper_RDY and _SummonSoulkeeper_Count >= 10 and ((ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 3) or ConRO_AoEButton:IsVisible()) then
 			tinsert(ConRO.SuggestedSpells, _SummonSoulkeeper);
 			__SummonSoulkeeper_Count = 0;
 		end
@@ -894,35 +912,61 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 		if _Havoc_RDY and not _Havoc_DEBUFF and (ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 2) then
 			tinsert(ConRO.SuggestedSpells, _Havoc);
 			_Havoc_RDY = false;
+			_Havoc_DEBUFF = true;
 		end
 
-		if _ChaosBolt_RDY and _SoulShards >= 2 and ((tChosen[Ability.Eradication.talentID] and not _Eradication_DEBUFF) or _SoulShards >= 4.5) and ((ConRO_AutoButton:IsVisible() and ((_enemies_in_40yrds < 5 and _Havoc_DEBUFF) or (_enemies_in_40yrds < 3 and not _Havoc_DEBUFF))) or ConRO_SingleButton:IsVisible()) then
-			tinsert(ConRO.SuggestedSpells, _ChaosBolt);
-			_SoulShards = _SoulShards - 2;
+		if (ConRO_AutoButton:IsVisible() and (_enemies_in_40yrds >= 5 or (_enemies_in_40yrds >= 3 and not _Havoc_DEBUFF))) or ConRO_AoEButton:IsVisible() then
+			if _RainofFire_RDY and _SoulShards >= 3 then
+				tinsert(ConRO.SuggestedSpells, _RainofFire);
+				_RainofFire_RDY = false;
+				_SoulShards = _SoulShards - 3;
+			end
+		else
+			if _ChaosBolt_RDY and _SoulShards >= 2 and tChosen[Ability.Eradication.talentID] and not _Eradication_DEBUFF and currentSpell ~= _ChaosBolt and not _is_moving then
+				tinsert(ConRO.SuggestedSpells, _ChaosBolt);
+				_SoulShards = _SoulShards - 2;
+				_Eradication_DEBUFF = true;
+				_BackDraft_COUNT = _BackDraft_COUNT - 1;
+			end
 		end
 
-		if _Shadowburn_RDY and _SoulShards >= 4.5 and _can_execute then
-			tinsert(ConRO.SuggestedSpells, _Shadowburn);
-			_SoulShards = _SoulShards - 1;
-		end
-
-		if _ChannelDemonfire_RDY then
+		if _ChannelDemonfire_RDY and _Immolate_DEBUFF and not _is_moving then
 			tinsert(ConRO.SuggestedSpells, _ChannelDemonfire);
 			_ChannelDemonfire_RDY = false;
 		end
 
-		if _Conflagrate_RDY and (_Conflagrate_CHARGES >= 2 or (_Conflagrate_CHARGES >= 1 and _SoulShards < 2)) then
-			tinsert(ConRO.SuggestedSpells, _Conflagrate);
-			_Conflagrate_CHARGES = _Conflagrate_CHARGES - 1;
+		if _DimensionalRift_RDY and (_DimensionalRift_CHARGES >= _DimensionalRift_MaxCHARGES or (_DimensionalRift_CHARGES >= _DimensionalRift_MaxCHARGES - 1 and _DimensionalRift_CCD <= 3) or (_DimensionalRift_CHARGES >= 1 and _is_moving)) then
+			tinsert(ConRO.SuggestedSpells, _DimensionalRift);
+			_DimensionalRift_CHARGES = _DimensionalRift_CHARGES - 1;
+			_SoulShards = _SoulShards + 0.3;
 		end
 
-		if _SoulFire_RDY and currentSpell ~= _SoulFire and ConRO:FullMode(_SoulFire) then
-			tinsert(ConRO.SuggestedSpells, _SoulFire);
-			_SoulFire_RDY = false;
+		if _Shadowburn_RDY and _Shadowburn_CHARGES > 1 and _is_moving then
+			tinsert(ConRO.SuggestedSpells, _Shadowburn);
+			_Shadowburn_CHARGES = _Shadowburn_CHARGES - 1;
+			_SoulShards = _SoulShards - 1;
+		end
+
+		if _ChaosBolt_RDY and _SoulShards >= 2 and not _is_moving then
+			tinsert(ConRO.SuggestedSpells, _ChaosBolt);
+			_SoulShards = _SoulShards - 2;
+			_BackDraft_COUNT = _BackDraft_COUNT - 1;
+		end
+
+		if _Conflagrate_RDY and _Conflagrate_CHARGES >= 1 and _SoulShards <= 4.5 then
+			tinsert(ConRO.SuggestedSpells, _Conflagrate);
+			_Conflagrate_CHARGES = _Conflagrate_CHARGES - 1;
+			_SoulShards = _SoulShards + 0.5;
 		end
 
 		if _Incinerate_RDY then
 			tinsert(ConRO.SuggestedSpells, _Incinerate);
+			if tChosen[Ability.DiabolicEmbers.talentID] then
+				_SoulShards = _SoulShards + 0.4;
+			else
+				_SoulShards = _SoulShards + 0.2;
+			end
+			_BackDraft_COUNT = _BackDraft_COUNT - 1;
 		end
 	end
 	return nil;
