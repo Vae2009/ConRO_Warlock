@@ -226,6 +226,7 @@ local ConRO_Warlock, ids = ...;
 			SpellLock = {spellID = 119910}, --Felhunter
 			ShadowLock = {spellID = 171140}, --Doomguard
 			MeteorStrike = {spellID = 171152}, --Infernal
+			AxeToss = {spellID = 119914}, --Felguard
 		},
 		Corruption = {spellID = 172},
 		CurseofWeakness = {spellID = 702},
@@ -398,8 +399,8 @@ local ConRO_Warlock, ids = ...;
 		MeteorStrike = {spellID = 171017}, --Infernal	
 		ThreateningPresence = {spellID = 112042}, -- Voidwalker
 		Felstorm = {spellID = 89751}, -- Felguard
-		AxeToss = {spellID = 89766},
-		SoulStrike = {spellID = 267964, talentID = 91538},
+		AxeToss = {spellID = 89766}, -- Felguard
+		SoulStrike = {spellID = 267964, talentID = 91538}, -- Felguard
 	}
 
 --Destruction

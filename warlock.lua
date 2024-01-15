@@ -524,12 +524,14 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	local _SummonVilefiend, _SummonVilefiend_RDY, _SummonVilefiend_CD = ConRO:AbilityReady(Ability.SummonVilefiend, timeShift);
 
 	local _AxeToss, _AxeToss_RDY = ConRO:AbilityReady(PetAbility.AxeToss, timeShift, 'pet');
+	local _AxeTossCD = ConRO:AbilityReady(Ability.CommandDemon.AxeToss, timeShift);
 	local _DevourMagic, _DevourMagic_RDY = ConRO:AbilityReady(PetAbility.DevourMagic, timeShift, 'pet');
 	local _Felstorm, _Felstorm_RDY, _Felstorm_CD = ConRO:AbilityReady(PetAbility.Felstorm, timeShift, 'pet');
 	local _SoulStrike, _SoulStrike_RDY = ConRO:AbilityReady(PetAbility.SoulStrike, timeShift, 'pet');
-	local _SpellLockCD = ConRO:AbilityReady(Ability.CommandDemon.SpellLock, timeShift);
 	local _SpellLock, _SpellLock_RDY = ConRO:AbilityReady(PetAbility.SpellLock, timeShift, 'pet');
+	local _SpellLockCD = ConRO:AbilityReady(Ability.CommandDemon.SpellLock, timeShift);
 
+--Conditions
 	local _CallDreadstalkers_COST = 2;
 
 	if _DemonicCalling_BUFF then
@@ -551,6 +553,8 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	end
 
 --Indicators
+	ConRO:AbilityInterrupt(_AxeToss, _AxeToss_RDY and ConRO:Interrupt());
+	ConRO:AbilityInterrupt(_AxeTossCD, _AxeToss_RDY and ConRO:Interrupt());
 	ConRO:AbilityInterrupt(_SpellLock, _SpellLock_RDY and ConRO:Interrupt());
 	ConRO:AbilityInterrupt(_SpellLockCD, _SpellLock_RDY and ConRO:Interrupt());
 	ConRO:AbilityPurge(_DevourMagic, _DevourMagic_RDY and ConRO:Purgable());
