@@ -20,13 +20,11 @@ function ConRO:EnableRotationModule(mode)
 			self.NextSpell = ConRO.Warlock.Affliction;
 			self.ToggleDamage();
 			ConROWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
-			ConRONextWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 			ConRODefenseWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 		else
 			self.NextSpell = ConRO.Warlock.Disabled;
 			self.ToggleHealer();
 			ConROWindow:SetAlpha(0);
-			ConRONextWindow:SetAlpha(0);
 			ConRODefenseWindow:SetAlpha(0);
 		end
 	end;
@@ -36,13 +34,11 @@ function ConRO:EnableRotationModule(mode)
 			self.NextSpell = ConRO.Warlock.Demonology;
 			self.ToggleDamage();
 			ConROWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
-			ConRONextWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 			ConRODefenseWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 		else
 			self.NextSpell = ConRO.Warlock.Disabled;
 			self.ToggleHealer();
 			ConROWindow:SetAlpha(0);
-			ConRONextWindow:SetAlpha(0);
 			ConRODefenseWindow:SetAlpha(0);
 		end
 	end;
@@ -52,13 +48,11 @@ function ConRO:EnableRotationModule(mode)
 			self.NextSpell = ConRO.Warlock.Destruction;
 			self.ToggleDamage();
 			ConROWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
-			ConRONextWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 			ConRODefenseWindow:SetAlpha(ConRO.db.profile.transparencyWindow);
 		else
 			self.NextSpell = ConRO.Warlock.Disabled;
 			self.ToggleHealer();
 			ConROWindow:SetAlpha(0);
-			ConRONextWindow:SetAlpha(0);
 			ConRODefenseWindow:SetAlpha(0);
 		end
 	end;
@@ -175,6 +169,7 @@ function ConRO.Warlock.Under10(_, timeShift, currentSpell, gcd)
 	wipe(ConRO.SuggestedSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Warlock_Ability, ids.Warlock_Form, ids.Warlock_Buff, ids.Warlock_Debuff, ids.Warlock_PetAbility, ids.Warlock_PvPTalent;
+
 --Abilities
 	local _Corruption, _Corruption_RDY = ConRO:AbilityReady(Ability.Corruption, timeShift);
 		local _Corruption_DEBUFF, _, _Corruption_DUR = ConRO:TargetAura(Debuff.Corruption, timeShift);
@@ -199,6 +194,7 @@ function ConRO.Warlock.Under10Def(_, timeShift, currentSpell, gcd)
 	wipe(ConRO.SuggestedDefSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Warlock_Ability, ids.Warlock_Form, ids.Warlock_Buff, ids.Warlock_Debuff, ids.Warlock_PetAbility, ids.Warlock_PvPTalent;
+
 --Abilities
 	local _CreateHealthstone, _CreateHealthstone_RDY = ConRO:AbilityReady(Ability.CreateHealthstone, timeShift);
 		local _Healthstone, _Healthstone_RDY, _, _, _Healthstone_COUNT = ConRO:ItemReady(Ability.Healthstone, timeShift);
@@ -233,6 +229,7 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	wipe(ConRO.SuggestedSpells)
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Aff_Ability, ids.Aff_Form, ids.Aff_Buff, ids.Aff_Debuff, ids.Aff_PetAbility, ids.Aff_PvPTalent;
+
 --Abilities
 	local _Agony, _Agony_RDY = ConRO:AbilityReady(Ability.Agony, timeShift);
 		local _Agony_DEBUFF, _, _Agony_DUR = ConRO:TargetAura(Debuff.Agony, timeShift);
@@ -453,6 +450,7 @@ function ConRO.Warlock.AfflictionDef(_, timeShift, currentSpell, gcd, tChosen, p
 	wipe(ConRO.SuggestedDefSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Aff_Ability, ids.Aff_Form, ids.Aff_Buff, ids.Aff_Debuff, ids.Aff_PetAbility, ids.Aff_PvPTalent;
+
 --Abilities
 	local _CreateHealthstone, _CreateHealthstone_RDY = ConRO:AbilityReady(Ability.Healthstone.Create, timeShift);
 		local _Healthstone, _Healthstone_RDY, _, _, _Healthstone_COUNT = ConRO:ItemReady(Ability.Healthstone.Use, timeShift);
@@ -500,6 +498,7 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	wipe(ConRO.SuggestedSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Demo_Ability, ids.Demo_Form, ids.Demo_Buff, ids.Demo_Debuff, ids.Demo_PetAbility, ids.Demo_PvPTalent;
+
 --Abilities
 	local _BilescourgeBombers, _BilescourgeBombers_RDY = ConRO:AbilityReady(Ability.BilescourgeBombers, timeShift);
 	local _CallDreadstalkers, _CallDreadstalkers_RDY, _CallDreadstalkers_CD = ConRO:AbilityReady(Ability.CallDreadstalkers, timeShift);
@@ -711,6 +710,7 @@ function ConRO.Warlock.DemonologyDef(_, timeShift, currentSpell, gcd, tChosen, p
 	wipe(ConRO.SuggestedDefSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Demo_Ability, ids.Demo_Form, ids.Demo_Buff, ids.Demo_Debuff, ids.Demo_PetAbility, ids.Demo_PvPTalent;
+
 --Abilities
 	local _CreateHealthstone, _CreateHealthstone_RDY = ConRO:AbilityReady(Ability.Healthstone.Create, timeShift);
 		local _Healthstone, _Healthstone_RDY, _, _, _Healthstone_COUNT = ConRO:ItemReady(Ability.Healthstone.Use, timeShift);
@@ -756,6 +756,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	wipe(ConRO.SuggestedSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Dest_Ability, ids.Dest_Form, ids.Dest_Buff, ids.Dest_Debuff, ids.Dest_PetAbility, ids.Dest_PvPTalent;
+
 --Abilities	
 	local _Cataclysm, _Cataclysm_RDY = ConRO:AbilityReady(Ability.Cataclysm, timeShift);
 	local _ChannelDemonfire, _ChannelDemonfire_RDY = ConRO:AbilityReady(Ability.ChannelDemonfire, timeShift);
@@ -980,6 +981,7 @@ function ConRO.Warlock.DestructionDef(_, timeShift, currentSpell, gcd, tChosen, 
 	wipe(ConRO.SuggestedDefSpells);
 	ConRO:Stats();
 	local Ability, Form, Buff, Debuff, PetAbility, PvPTalent = ids.Dest_Ability, ids.Dest_Form, ids.Dest_Buff, ids.Dest_Debuff, ids.Dest_PetAbility, ids.Dest_PvPTalent;
+
 --Abilities
 	local _CreateHealthstone, _CreateHealthstone_RDY = ConRO:AbilityReady(Ability.Healthstone.Create, timeShift);
 		local _Healthstone, _Healthstone_RDY, _, _, _Healthstone_COUNT = ConRO:ItemReady(Ability.Healthstone.Use, timeShift);
