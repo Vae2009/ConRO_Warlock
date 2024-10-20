@@ -133,6 +133,8 @@ local _ArcaneTorrent, _ArcaneTorrent_RDY = _, _;
 local _Berserking, _Berserking_RDY = _, _;
 local _Cannibalize, _Cannibalize_RDY = _, _;
 
+local HeroSpec, Racial = ids.HeroSpec, ids.Racial;
+
 function ConRO:Stats()
 	_Player_Level = UnitLevel("player");
 	_Player_Intellect = UnitStat("player", 4);
@@ -159,10 +161,10 @@ function ConRO:Stats()
 	_Pet_assist = ConRO:PetAssist();
 	_Pet_Percent_Health = ConRO:PercentHealth('pet');
 
-	_ArcanePulse, _ArcanePulse_RDY = ConRO:AbilityReady(ids.Racial.ArcanePulse, timeShift);
-	_ArcaneTorrent, _ArcaneTorrent_RDY = ConRO:AbilityReady(ids.Racial.ArcaneTorrent, timeShift);
-	_Berserking, _Berserking_RDY = ConRO:AbilityReady(ids.Racial.Berserking, timeShift);
-	_Cannibalize, _Cannibalize_RDY = ConRO:AbilityReady(ids.Racial.Cannibalize, timeShift);
+	_ArcanePulse, _ArcanePulse_RDY = ConRO:AbilityReady(Racial.ArcanePulse, timeShift);
+	_ArcaneTorrent, _ArcaneTorrent_RDY = ConRO:AbilityReady(Racial.ArcaneTorrent, timeShift);
+	_Berserking, _Berserking_RDY = ConRO:AbilityReady(Racial.Berserking, timeShift);
+	_Cannibalize, _Cannibalize_RDY = ConRO:AbilityReady(Racial.Cannibalize, timeShift);
 end
 
 function ConRO.Warlock.Under10(_, timeShift, currentSpell, gcd)
@@ -233,7 +235,6 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 --Abilities
 	local _Agony, _Agony_RDY = ConRO:AbilityReady(Ability.Agony, timeShift);
 		local _Agony_DEBUFF, _, _Agony_DUR = ConRO:TargetAura(Debuff.Agony, timeShift);
-		local _InevitableDemise_BUFF, _InevitableDemise_COUNT, _InevitableDemise_DUR = ConRO:Aura(Buff.InevitableDemise, timeShift);
 	local _Corruption, _Corruption_RDY = ConRO:AbilityReady(Ability.Corruption, timeShift);
 		local _Corruption_DEBUFF, _, _Corruption_DUR = ConRO:TargetAura(Debuff.Corruption, timeShift);
 	local _DrainLife, _DrainLife_RDY = ConRO:AbilityReady(Ability.DrainLife, timeShift);
@@ -244,20 +245,15 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	local _Haunt, _Haunt_RDY = ConRO:AbilityReady(Ability.Haunt, timeShift);
 	local _MaleficRapture, _MaleficRapture_RDY = ConRO:AbilityReady(Ability.MaleficRapture, timeShift);
 		local _MaleficAffliction_DEBUFF, _MaleficAffliction_COUNT = ConRO:Form(Debuff.MaleficAffliction);
-		local _DreadTouch_DEBUFF = ConRO:TargetAura(Debuff.DreadTouch, timeShift);
 	local _PhantomSingularity, _PhantomSingularity_RDY = ConRO:AbilityReady(Ability.PhantomSingularity, timeShift);
 		local _PhantomSingularity_DEBUFF, _, _PhantomSingularity_DUR = ConRO:TargetAura(Debuff.PhantomSingularity, timeShift);
 	local _SeedofCorruption, _SeedofCorruption_RDY = ConRO:AbilityReady(Ability.SeedofCorruption, timeShift);
 		local _SeedofCorruption_DEBUFF = ConRO:TargetAura(Debuff.SeedofCorruption, timeShift);
-	local _SiphonLife, _SiphonLife_RDY = ConRO:AbilityReady(Ability.SiphonLife, timeShift);
-		local _SiphonLife_DEBUFF, _, _SiphonLife_DUR = ConRO:TargetAura(Debuff.SiphonLife, timeShift);
 	local _ShadowBolt, _ShadowBolt_RDY = ConRO:AbilityReady(Ability.ShadowBolt, timeShift);
 		local _ShadowEmbrace_DEBUFF, _ShadowEmbrace_COUNT, _ShadowEmbrace_DUR = ConRO:TargetAura(Debuff.ShadowEmbrace, timeShift);
 	local _SoulRot, _SoulRot_RDY = ConRO:AbilityReady(Ability.SoulRot, timeShift);
 	local _SummonDarkglare, _SummonDarkglare_RDY, _SummonDarkglare_CD = ConRO:AbilityReady(Ability.SummonDarkglare, timeShift);
 	local _SummonFelhunter, _SummonFelhunter_RDY = ConRO:AbilityReady(Ability.SummonDemon.Felhunter, timeShift);
-	local _SummonSoulkeeper, _SummonSoulkeeper_RDY = ConRO:AbilityReady(Ability.SummonSoulkeeper, timeShift);
-		local _SummonSoulkeeper_Count = GetSpellCount(_SummonSoulkeeper);
 	local _UnstableAffliction, _UnstableAffliction_RDY = ConRO:AbilityReady(Ability.UnstableAffliction, timeShift);
 	local _UnstableAfflictionRA, _UnstableAfflictionRA_RDY = ConRO:AbilityReady(PvPTalent.UnstableAfflictionRA, timeShift, 'pvp');
 		local _UnstableAffliction_DEBUFF, _, _UnstableAffliction_DUR = ConRO:TargetAura(Debuff.UnstableAffliction, timeShift);
@@ -271,11 +267,7 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 
 	local _Void_out	= IsSpellKnown(PetAbility.ThreateningPresence.spellID, true);
 
-	if tChosen[Ability.AbsoluteCorruption.talentID] then
-		_Corruption_DEBUFF = ConRO:PersistentDebuff(Debuff.Corruption);
-		_Corruption_DUR = 10000;
-	end
-
+--Conditions
 	if currentSpell == _MaleficRapture then
 		_SoulShards = _SoulShards - 1;
 	elseif currentSpell == _SeedofCorruption then
@@ -284,8 +276,26 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 		_SoulShards = _SoulShards - 1;
 	end
 
-	if currentSpell == _ShadowBolt then
+	if currentSpell == _ShadowBolt or (tChosen[Ability.ImprovedHaunt.talentID] and currentSpell == _Haunt) then
 		_ShadowEmbrace_COUNT = _ShadowEmbrace_COUNT + 1;
+		_ShadowEmbrace_DEBUFF = true;
+	end
+
+	if ConRO:HeroSpec(HeroSpec.Hellcaller) then
+		_Corruption, _Corruption_RDY = ConRO:AbilityReady(Ability.Wither, timeShift);
+		_Corruption_DEBUFF, _, _Corruption_DUR = ConRO:TargetAura(Debuff.Wither, timeShift);
+	end
+
+	if tChosen[Ability.AbsoluteCorruption.talentID] then
+		if ConRO:HeroSpec(HeroSpec.Hellcaller) then
+			_Corruption_DEBUFF = ConRO:PersistentDebuff(Debuff.Wither);
+		else
+			_Corruption_DEBUFF = ConRO:PersistentDebuff(Debuff.Corruption);
+		end
+
+		if not _is_PC then
+			_Corruption_DUR = 10000;
+		end
 	end
 
 	if _is_PvP then
@@ -300,147 +310,147 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	ConRO:AbilityPurge(_DevourMagic, _DevourMagic_RDY and ConRO:Purgable());
 	ConRO:AbilityPurge(_ArcaneTorrent, _ArcaneTorrent_RDY and _target_in_melee and ConRO:Purgable());
 
-	ConRO:AbilityBurst(_SummonDarkglare, _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.SiphonLife.talentID] or (tChosen[Ability.SiphonLife.talentID] and _SiphonLife_DEBUFF)) and (not tChosen[Ability.PhantomSingularity.talentID] or (tChosen[Ability.PhantomSingularity.talentID] and _PhantomSingularity_DEBUFF)) and (not tChosen[Ability.VileTaint.talentID] or (tChosen[Ability.VileTaint.talentID] and _VileTaint_DEBUFF)) and ConRO:BurstMode(_SummonDarkglare));
-	ConRO:AbilityBurst(_PhantomSingularity, _PhantomSingularity_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.SiphonLife.talentID] or (tChosen[Ability.SiphonLife.talentID] and _SiphonLife_DEBUFF)) and ConRO:BurstMode(_PhantomSingularity));
-	ConRO:AbilityBurst(_SoulRot, _SoulRot_RDY and currentSpell ~= _SoulRot and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.SiphonLife.talentID] or (tChosen[Ability.SiphonLife.talentID] and _SiphonLife_DEBUFF)) and ConRO:BurstMode(_SoulRot));
+	ConRO:AbilityBurst(_SummonDarkglare, _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.PhantomSingularity.talentID] or (tChosen[Ability.PhantomSingularity.talentID] and _PhantomSingularity_DEBUFF)) and (not tChosen[Ability.VileTaint.talentID] or (tChosen[Ability.VileTaint.talentID] and _VileTaint_DEBUFF)) and ConRO:BurstMode(_SummonDarkglare));
+	ConRO:AbilityBurst(_PhantomSingularity, _PhantomSingularity_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:BurstMode(_PhantomSingularity));
+	ConRO:AbilityBurst(_SoulRot, _SoulRot_RDY and currentSpell ~= _SoulRot and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:BurstMode(_SoulRot));
 	ConRO:AbilityBurst(_GrimoireofSacrifice, _GrimoireofSacrifice_RDY and not _GrimoireofSacrifice_BUFF);
 
 --Warnings
 	ConRO:Warnings("Summon your demon!", not tChosen[Ability.GrimoireofSacrifice.talentID] and not _Pet_summoned);
 
---Rotations	
-	if _DrainLife_RDY and _InevitableDemise_COUNT == 50 and _InevitableDemise_DUR <= 3 then
-		tinsert(ConRO.SuggestedSpells, _DrainLife);
-		_DrainLife_RDY = false;
-	end
-
-	if (ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 3) then
-		if _VileTaint_RDY and _SoulShards >= 1 and currentSpell ~= _VileTaint then
-			tinsert(ConRO.SuggestedSpells, _VileTaint);
-			_VileTaint_RDY = false;
-			_SoulShards = _SoulShards - 1;
+--Rotations
+for i = 1, 2, 1 do
+		if _DrainLife_RDY and _InevitableDemise_COUNT == 50 and _InevitableDemise_DUR <= 3 then
+			tinsert(ConRO.SuggestedSpells, _DrainLife);
+			_DrainLife_RDY = false;
 		end
 
-		if _SeedofCorruption_RDY and _SoulShards >= 1 and (not (_Corruption_DEBUFF or _SeedofCorruption_DEBUFF) or _Corruption_DUR <= 3) then
-			tinsert(ConRO.SuggestedSpells, _SeedofCorruption);
-			_SoulShards = _SoulShards - 1;
-			_SeedofCorruption_DEBUFF = true;
-		end
+		if (ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 3) then
+			if _VileTaint_RDY and _SoulShards >= 1 and currentSpell ~= _VileTaint then
+				tinsert(ConRO.SuggestedSpells, _VileTaint);
+				_VileTaint_RDY = false;
+				_SoulShards = _SoulShards - 1;
+			end
 
-		if _Agony_RDY and (not _Agony_DEBUFF or _Agony_DUR <= 3) then
-			tinsert(ConRO.SuggestedSpells, _Agony);
-			_Agony_RDY = false;
-		elseif _UnstableAffliction_RDY and (not _UnstableAffliction_DEBUFF or _UnstableAffliction_DUR <= 3) and currentSpell ~= _UnstableAffliction then
-			tinsert(ConRO.SuggestedSpells, _UnstableAffliction);
-			_UnstableAffliction_RDY = false;
-		end
+			if _SeedofCorruption_RDY and _SoulShards >= 1 and (not (_Corruption_DEBUFF or _SeedofCorruption_DEBUFF) or _Corruption_DUR <= 3) then
+				tinsert(ConRO.SuggestedSpells, _SeedofCorruption);
+				_SoulShards = _SoulShards - 1;
+				_SeedofCorruption_DEBUFF = true;
+			end
 
-		if _Haunt_RDY and currentSpell ~= _Haunt then
-			tinsert(ConRO.SuggestedSpells, _Haunt);
-			_Haunt_RDY = false;
-		end
+			if _Agony_RDY and (not _Agony_DEBUFF or _Agony_DUR <= 3) then
+				tinsert(ConRO.SuggestedSpells, _Agony);
+				_Agony_RDY = false;
+			end
 
-		if _PhantomSingularity_RDY and ConRO:FullMode(_PhantomSingularity) then
-			tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
-			_PhantomSingularity_RDY = false;
-		end
+			if _UnstableAffliction_RDY and (not _UnstableAffliction_DEBUFF or _UnstableAffliction_DUR <= 3) and currentSpell ~= _UnstableAffliction then
+				tinsert(ConRO.SuggestedSpells, _UnstableAffliction);
+				_UnstableAffliction_RDY = false;
+			end
 
-		if _SoulRot_RDY and currentSpell ~= _SoulRot and ConRO:FullMode(_SoulRot) then
-			tinsert(ConRO.SuggestedSpells, _SoulRot);
-			_SoulRot_RDY = false;
-		end
+			if _Haunt_RDY and currentSpell ~= _Haunt then
+				tinsert(ConRO.SuggestedSpells, _Haunt);
+				_Haunt_RDY = false;
+			end
 
-		if _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:FullMode(_SummonDarkglare) then
-			tinsert(ConRO.SuggestedSpells, _SummonDarkglare);
-			_SummonDarkglare_RDY = false;
-		end
+			if _PhantomSingularity_RDY and ConRO:FullMode(_PhantomSingularity) then
+				tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
+				_PhantomSingularity_RDY = false;
+			end
 
-		if _MaleficRapture_RDY and _SoulShards >= 1 and _MaleficAffliction_COUNT < 3 and tChosen[Ability.DoomBlossom.talentID] then
-			tinsert(ConRO.SuggestedSpells, _MaleficRapture);
-			_SoulShards = _SoulShards - 1;
-			_MaleficAffliction_COUNT = _MaleficAffliction_COUNT + 1
-		end
+			if _SoulRot_RDY and currentSpell ~= _SoulRot and ConRO:FullMode(_SoulRot) then
+				tinsert(ConRO.SuggestedSpells, _SoulRot);
+				_SoulRot_RDY = false;
+			end
 
-		if _SummonSoulkeeper_RDY and _SummonSoulkeeper_Count >= 10 then
-			tinsert(ConRO.SuggestedSpells, _SummonSoulkeeper);
-			__SummonSoulkeeper_Count = 0;
-		end
+			if _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:FullMode(_SummonDarkglare) then
+				tinsert(ConRO.SuggestedSpells, _SummonDarkglare);
+				_SummonDarkglare_RDY = false;
+			end
 
-		if _SeedofCorruption_RDY and _SoulShards >= 1 and _SeedofCorruption_DEBUFF then
-			tinsert(ConRO.SuggestedSpells, _SeedofCorruption);
-			_SoulShards = _SoulShards - 1;
-			_SeedofCorruption_DEBUFF = true;
-		end
+			if _MaleficRapture_RDY and _SoulShards >= 1 and _MaleficAffliction_COUNT < 3 then
+				tinsert(ConRO.SuggestedSpells, _MaleficRapture);
+				_SoulShards = _SoulShards - 1;
+				_MaleficAffliction_COUNT = _MaleficAffliction_COUNT + 1
+			end
 
-		if _DrainSoul_RDY and tChosen[Ability.DrainSoul.talentID] then
-			tinsert(ConRO.SuggestedSpells, _DrainSoul);
-		elseif _ShadowBolt_RDY and not tChosen[Ability.DrainSoul.talentID] then
-			tinsert(ConRO.SuggestedSpells, _ShadowBolt);
-		end
-	else
-		if _Haunt_RDY and currentSpell ~= _Haunt then
-			tinsert(ConRO.SuggestedSpells, _Haunt);
-			_Haunt_RDY = false;
-		end
+			if _SeedofCorruption_RDY and _SoulShards >= 1 and _SeedofCorruption_DEBUFF then
+				tinsert(ConRO.SuggestedSpells, _SeedofCorruption);
+				_SoulShards = _SoulShards - 1;
+				_SeedofCorruption_DEBUFF = true;
+			end
 
-		if _Agony_RDY and (not _Agony_DEBUFF or _Agony_DUR <= 3) then
-			tinsert(ConRO.SuggestedSpells, _Agony);
-			_Agony_RDY = false;
-		elseif _UnstableAffliction_RDY and (not _UnstableAffliction_DEBUFF or _UnstableAffliction_DUR <= 3) and currentSpell ~= _UnstableAffliction then
-			tinsert(ConRO.SuggestedSpells, _UnstableAffliction);
-			_UnstableAffliction_RDY = false;
-		elseif _Corruption_RDY and (not (_Corruption_DEBUFF or _SeedofCorruption_DEBUFF) or _Corruption_DUR <= 3) then
-			tinsert(ConRO.SuggestedSpells, _Corruption);
-			_Corruption_RDY = false;
-		elseif _SiphonLife_RDY and (not _SiphonLife_DEBUFF or _SiphonLife_DUR <= 3) then
-			tinsert(ConRO.SuggestedSpells, _SiphonLife);
-			_SiphonLife_RDY = false;
-		end
-
-		if tChosen[Ability.ShadowEmbrace.talentID] and (_ShadowEmbrace_COUNT < 3 or _ShadowEmbrace_DUR <= 2) then
 			if _DrainSoul_RDY and tChosen[Ability.DrainSoul.talentID] then
 				tinsert(ConRO.SuggestedSpells, _DrainSoul);
 			elseif _ShadowBolt_RDY and not tChosen[Ability.DrainSoul.talentID] then
 				tinsert(ConRO.SuggestedSpells, _ShadowBolt);
 			end
-		end
-
-		if tChosen[Ability.SoulRot.talentID] then
-			if _PhantomSingularity_RDY and _SoulRot_RDY and ConRO:FullMode(_PhantomSingularity) then
-				tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
-				_PhantomSingularity_RDY = false;
-			end
 		else
-			if _PhantomSingularity_RDY and ConRO:FullMode(_PhantomSingularity) then
-				tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
-				_PhantomSingularity_RDY = false;
+			if _Haunt_RDY and currentSpell ~= _Haunt then
+				tinsert(ConRO.SuggestedSpells, _Haunt);
+				_Haunt_RDY = false;
 			end
-		end
 
-		if _VileTaint_RDY and _SoulShards >= 1 and currentSpell ~= _VileTaint then
-			tinsert(ConRO.SuggestedSpells, _VileTaint);
-			_VileTaint_RDY = false;
-		end
+			if _Agony_RDY and (not _Agony_DEBUFF or _Agony_DUR <= 3) then
+				tinsert(ConRO.SuggestedSpells, _Agony);
+				_Agony_RDY = false;
+			end
 
-		if _SoulRot_RDY and currentSpell ~= _SoulRot and ConRO:FullMode(_SoulRot) then
-			tinsert(ConRO.SuggestedSpells, _SoulRot);
-			_SoulRot_RDY = false;
-		end
+			if _UnstableAffliction_RDY and (not _UnstableAffliction_DEBUFF or _UnstableAffliction_DUR <= 3) and currentSpell ~= _UnstableAffliction then
+				tinsert(ConRO.SuggestedSpells, _UnstableAffliction);
+				_UnstableAffliction_RDY = false;
+			end
 
-		if _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:FullMode(_SummonDarkglare) then
-			tinsert(ConRO.SuggestedSpells, _SummonDarkglare);
-			_SummonDarkglare_RDY = false;
-		end
+			if _Corruption_RDY and (not (_Corruption_DEBUFF or _SeedofCorruption_DEBUFF) or _Corruption_DUR <= 3) then
+				tinsert(ConRO.SuggestedSpells, _Corruption);
+				_Corruption_RDY = false;
+			end
 
-		if _MaleficRapture_RDY and (_SoulShards > 1 or (_SoulShards >= 1 and _MaleficAffliction_COUNT == 3 and not _DreadTouch_DEBUFF)) then
-			tinsert(ConRO.SuggestedSpells, _MaleficRapture);
-			_SoulShards = _SoulShards - 1;
-		end
+			if tChosen[Ability.ShadowEmbrace.talentID] and (_ShadowEmbrace_COUNT < 3 or _ShadowEmbrace_DUR <= 2) then
+				if _DrainSoul_RDY and tChosen[Ability.DrainSoul.talentID] then
+					tinsert(ConRO.SuggestedSpells, _DrainSoul);
+				elseif _ShadowBolt_RDY and not tChosen[Ability.DrainSoul.talentID] then
+					tinsert(ConRO.SuggestedSpells, _ShadowBolt);
+				end
+			end
 
-		if _DrainSoul_RDY and tChosen[Ability.DrainSoul.talentID] then
-			tinsert(ConRO.SuggestedSpells, _DrainSoul);
-		elseif _ShadowBolt_RDY and not tChosen[Ability.DrainSoul.talentID] then
-			tinsert(ConRO.SuggestedSpells, _ShadowBolt);
+			if tChosen[Ability.SoulRot.talentID] then
+				if _PhantomSingularity_RDY and _SoulRot_RDY and ConRO:FullMode(_PhantomSingularity) then
+					tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
+					_PhantomSingularity_RDY = false;
+				end
+			else
+				if _PhantomSingularity_RDY and ConRO:FullMode(_PhantomSingularity) then
+					tinsert(ConRO.SuggestedSpells, _PhantomSingularity);
+					_PhantomSingularity_RDY = false;
+				end
+			end
+
+			if _VileTaint_RDY and _SoulShards >= 1 and currentSpell ~= _VileTaint then
+				tinsert(ConRO.SuggestedSpells, _VileTaint);
+				_VileTaint_RDY = false;
+			end
+
+			if _SoulRot_RDY and currentSpell ~= _SoulRot and ConRO:FullMode(_SoulRot) then
+				tinsert(ConRO.SuggestedSpells, _SoulRot);
+				_SoulRot_RDY = false;
+			end
+
+			if _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:FullMode(_SummonDarkglare) then
+				tinsert(ConRO.SuggestedSpells, _SummonDarkglare);
+				_SummonDarkglare_RDY = false;
+			end
+
+			if _MaleficRapture_RDY and (_SoulShards > 1 or (_SoulShards >= 1 and _MaleficAffliction_COUNT == 3)) then
+				tinsert(ConRO.SuggestedSpells, _MaleficRapture);
+				_SoulShards = _SoulShards - 1;
+			end
+
+			if _DrainSoul_RDY and tChosen[Ability.DrainSoul.talentID] then
+				tinsert(ConRO.SuggestedSpells, _DrainSoul);
+			elseif _ShadowBolt_RDY and not tChosen[Ability.DrainSoul.talentID] then
+				tinsert(ConRO.SuggestedSpells, _ShadowBolt);
+			end
 		end
 	end
 	return nil;
@@ -511,15 +521,11 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	local _Guillotine, _Guillotine_RDY = ConRO:AbilityReady(Ability.Guillotine, timeShift);
 	local _HandofGuldan, _HandofGuldan_RDY = ConRO:AbilityReady(Ability.HandofGuldan, timeShift);
 	local _Implosion, _Implosion_RDY = ConRO:AbilityReady(Ability.Implosion, timeShift);
-	local _NetherPortal, _NetherPortal_RDY, _NetherPortal_CD = ConRO:AbilityReady(Ability.NetherPortal, timeShift);
-		local _NetherPortal_BUFF = ConRO:Aura(Buff.NetherPortal, timeShift);
 	local _PowerSiphon, _PowerSiphon_RDY = ConRO:AbilityReady(Ability.PowerSiphon, timeShift);
 	local _ShadowBolt, _ShadowBolt_RDY = ConRO:AbilityReady(Ability.ShadowBolt, timeShift);
 		local _DemonicCalling_BUFF = ConRO:Aura(Buff.DemonicCalling, timeShift);
 	local _SummonDemonicTyrant, _SummonDemonicTyrant_RDY, _SummonDemonicTyrant_CD = ConRO:AbilityReady(Ability.SummonDemonicTyrant, timeShift);
 	local _SummonFelguard, _SummonFelguard_RDY = ConRO:AbilityReady(Ability.SummonDemon.Felguard, timeShift);
-	local _SummonSoulkeeper, _SummonSoulkeeper_RDY = ConRO:AbilityReady(Ability.SummonSoulkeeper, timeShift);
-		local _SummonSoulkeeper_Count = GetSpellCount(_SummonSoulkeeper);
 	local _SummonVilefiend, _SummonVilefiend_RDY, _SummonVilefiend_CD = ConRO:AbilityReady(Ability.SummonVilefiend, timeShift);
 
 	local _AxeToss, _AxeToss_RDY = ConRO:AbilityReady(PetAbility.AxeToss, timeShift, 'pet');
@@ -562,7 +568,6 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	ConRO:AbilityBurst(_DemonicStrength, _DemonicStrength_RDY and _Felstorm_CD <= 25 and ConRO:BurstMode(_DemonicStrength));
 	ConRO:AbilityBurst(_SoulStrike, _SoulStrike_RDY and _SoulShards <= 4);
 	ConRO:AbilityBurst(_GrimoireFelguard, _GrimoireFelguard_RDY and _SoulShards >= 1 and ConRO:BurstMode(_GrimoireFelguard));
-	ConRO:AbilityBurst(_NetherPortal, _NetherPortal_RDY and _SummonDemonicTyrant_RDY and _CallDreadstalkers_RDY and (svilefiend or not tChosen[Ability.SummonVilefiend.talentID]) and _SoulShards >= 1 and currentSpell ~= _NetherPortal and ConRO:BurstMode(_NetherPortal));
 	ConRO:AbilityBurst(_SummonDemonicTyrant, _SummonDemonicTyrant_RDY and currentSpell ~= _SummonDemonicTyrant and _CallDreadstalkers_CD >= 10 and ConRO:BurstMode(_SummonDemonicTyrant));
 	ConRO:AbilityBurst(_SummonVilefiend, _SummonVilefiend_RDY and _SoulShards >= 1 and (_SummonDemonicTyrant_RDY or _SummonDemonicTyrant_CD >= 40) and ConRO:BurstMode(_SummonVilefiend));
 
@@ -590,17 +595,6 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 				_SoulShards = _SoulShards + 1;
 			end
 
-			if _Doom_RDY and not _Doom_DEBUFF then
-				tinsert(ConRO.SuggestedSpells, _Doom);
-				_Doom_RDY = false;
-			end
-
-			if _NetherPortal_RDY and currentSpell ~= _NetherPortal and ConRO:FullMode(_NetherPortal) then
-				tinsert(ConRO.SuggestedSpells, _NetherPortal);
-				_NetherPortal_RDY = false;
-				_SoulShards = _SoulShards - 1;
-			end
-
 			if _CallDreadstalkers_RDY and _SoulShards >= _CallDreadstalkers_COST and currentSpell ~= _CallDreadstalkers then
 				tinsert(ConRO.SuggestedSpells, _CallDreadstalkers);
 				_CallDreadstalkers_RDY = false;
@@ -611,12 +605,6 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 		if _Demonbolt_RDY and _DemonicCore_DUR <= 2 and _DemonicCore_COUNT >= 1 then
 			tinsert(ConRO.SuggestedSpells, _Demonbolt);
 			_DemonicCore_COUNT = _DemonicCore_COUNT - 1;
-		end
-
-		if _NetherPortal_RDY and currentSpell ~= _NetherPortal and ConRO:FullMode(_NetherPortal) then
-			tinsert(ConRO.SuggestedSpells, _NetherPortal);
-			_NetherPortal_RDY = false;
-			_SoulShards = _SoulShards - 1;
 		end
 
 		if not tChosen[Ability.GrimoireFelguard.talentID] or (tChosen[Ability.GrimoireFelguard.talentID] and _GrimoireFelguard_CD > 0) then
@@ -666,19 +654,9 @@ function ConRO.Warlock.Demonology(_, timeShift, currentSpell, gcd, tChosen, pvpC
 			_SoulShards = _SoulShards - 3;
 		end
 
-		if _SummonSoulkeeper_RDY and _SummonSoulkeeper_Count >= 10 and ((ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 2) or ConRO_AoEButton:IsVisible()) then
-			tinsert(ConRO.SuggestedSpells, _SummonSoulkeeper);
-			__SummonSoulkeeper_Count = 0;
-		end
-
 		if _Implosion_RDY and ((ConRO:ImpsOut() >= 6 and _DemonicCore_COUNT <= 0) or ConRO:ImpsOut() >= 9) and ((ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 2) or ConRO_AoEButton:IsVisible()) then
 			tinsert(ConRO.SuggestedSpells, _Implosion);
 			_Implosion_RDY = false;
-		end
-
-		if _Doom_RDY and not _Doom_DEBUFF and ((ConRO_AutoButton:IsVisible() and _enemies_in_40yrds <= 1) or ConRO_SingleButton:IsVisible()) then
-			tinsert(ConRO.SuggestedSpells, _Doom);
-			_Doom_RDY = false;
 		end
 
 		if _Demonbolt_RDY and _DemonicCore_COUNT >= 2 and _SoulShards <= 3 then
@@ -775,7 +753,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 		local _Havoc_Target_DEBUFF = ConRO:TargetAura(Debuff.Havoc, timeShift);
 		local _Havoc_DEBUFF = ConRO:AnyTargetAura(Debuff.Havoc);
 	local _Immolate, _Immolate_RDY = ConRO:AbilityReady(Ability.Immolate, timeShift);
-		local _Immolate_DEBUFF = ConRO:TargetAura(Debuff.Immolate, timeShift + 3);
+		local _Immolate_DEBUFF = ConRO:TargetAura(Debuff.Immolate, timeShift);
 	local _Incinerate, _Incinerate_RDY = ConRO:AbilityReady(Ability.Incinerate, timeShift);
 	local _RainofFire, _RainofFire_RDY = ConRO:AbilityReady(Ability.RainofFire, timeShift);
 	local _Shadowburn, _Shadowburn_RDY = ConRO:AbilityReady(Ability.Shadowburn, timeShift);
@@ -783,8 +761,6 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	local _SoulFire, _SoulFire_RDY = ConRO:AbilityReady(Ability.SoulFire, timeShift);
 	local _SummonInfernal, _SummonInfernal_RDY, _SummonInfernal_CD = ConRO:AbilityReady(Ability.SummonInfernal, timeShift);
 	local _SummonImp, _SummonImp_RDY = ConRO:AbilityReady(Ability.SummonDemon.Imp, timeShift);
-	local _SummonSoulkeeper, _SummonSoulkeeper_RDY = ConRO:AbilityReady(Ability.SummonSoulkeeper, timeShift);
-		local _SummonSoulkeeper_Count = GetSpellCount(_SummonSoulkeeper);
 
 	local _SpellLockCD = ConRO:AbilityReady(Ability.CommandDemon.SpellLock, timeShift);
 	local _SpellLock, _SpellLock_RDY = ConRO:AbilityReady(PetAbility.SpellLock, timeShift, 'pet');
@@ -792,15 +768,25 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 
 	local _Void_out = IsSpellKnown(PetAbility.ThreateningPresence.spellID, true);
 
+--Conditions
 	if currentSpell == _ChaosBolt then
 		_SoulShards = _SoulShards - 2;
 		_BackDraft_COUNT = _BackDraft_COUNT - 1;
 	elseif currentSpell == _Incinerate then
-		_SoulShards = _SoulShards + 0.2;
+		if tChosen[Ability.DiabolicEmbers.talentID] then
+			_SoulShards = _SoulShards + 0.4;
+		else
+			_SoulShards = _SoulShards + 0.2;
+		end
 		_BackDraft_COUNT = _BackDraft_COUNT - 1;
 	elseif currentSpell == _SoulFire then
 		_SoulShards = _SoulShards + 1;
 		_BackDraft_COUNT = _BackDraft_COUNT - 1;
+	end
+
+	if ConRO:HeroSpec(HeroSpec.Hellcaller) then
+		_Immolate, _Immolate_RDY = ConRO:AbilityReady(Ability.Wither, timeShift);
+		_Immolate_DEBUFF = ConRO:TargetAura(Debuff.Wither, timeShift);
 	end
 
 --Indicators
@@ -850,7 +836,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 				_SummonInfernal_RDY = false;
 			end
 
-			if _Incinerate_RDY then
+			if true then
 				tinsert(ConRO.SuggestedSpells, _Incinerate);
 				if tChosen[Ability.DiabolicEmbers.talentID] then
 					_SoulShards = _SoulShards + 0.4;
@@ -909,11 +895,6 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_SoulShards = _SoulShards + 0.5;
 		end
 
-		if _SummonSoulkeeper_RDY and _SummonSoulkeeper_Count >= 10 and ((ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 3) or ConRO_AoEButton:IsVisible()) then
-			tinsert(ConRO.SuggestedSpells, _SummonSoulkeeper);
-			__SummonSoulkeeper_Count = 0;
-		end
-
 		if _Havoc_RDY and not _Havoc_DEBUFF and (ConRO_AutoButton:IsVisible() and _enemies_in_40yrds >= 2) then
 			tinsert(ConRO.SuggestedSpells, _Havoc);
 			_Havoc_RDY = false;
@@ -964,7 +945,7 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_SoulShards = _SoulShards + 0.5;
 		end
 
-		if _Incinerate_RDY then
+		if true then
 			tinsert(ConRO.SuggestedSpells, _Incinerate);
 			if tChosen[Ability.DiabolicEmbers.talentID] then
 				_SoulShards = _SoulShards + 0.4;
