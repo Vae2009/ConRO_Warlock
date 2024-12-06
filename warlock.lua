@@ -314,9 +314,10 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 	ConRO:AbilityPurge(_DevourMagic, _DevourMagic_RDY and ConRO:Purgable());
 	ConRO:AbilityPurge(_ArcaneTorrent, _ArcaneTorrent_RDY and _target_in_melee and ConRO:Purgable());
 
-	ConRO:AbilityBurst(_SummonDarkglare, _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.PhantomSingularity.talentID] or (tChosen[Ability.PhantomSingularity.talentID] and _PhantomSingularity_DEBUFF)) and (not tChosen[Ability.VileTaint.talentID] or (tChosen[Ability.VileTaint.talentID] and _VileTaint_DEBUFF)) and ConRO:BurstMode(_SummonDarkglare));
+	ConRO:AbilityBurst(_Malevolence, _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Corruption_DEBUFF and ConRO:BurstMode(_Malevolence));
 	ConRO:AbilityBurst(_PhantomSingularity, _PhantomSingularity_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:BurstMode(_PhantomSingularity));
 	ConRO:AbilityBurst(_SoulRot, _SoulRot_RDY and currentSpell ~= _SoulRot and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and ConRO:BurstMode(_SoulRot));
+	ConRO:AbilityBurst(_SummonDarkglare, _SummonDarkglare_RDY and _Agony_DEBUFF and _Corruption_DEBUFF and _UnstableAffliction_DEBUFF and (not tChosen[Ability.PhantomSingularity.talentID] or (tChosen[Ability.PhantomSingularity.talentID] and _PhantomSingularity_DEBUFF)) and (not tChosen[Ability.VileTaint.talentID] or (tChosen[Ability.VileTaint.talentID] and _VileTaint_DEBUFF)) and ConRO:BurstMode(_SummonDarkglare));
 	ConRO:AbilityBurst(_GrimoireofSacrifice, _GrimoireofSacrifice_RDY and not _GrimoireofSacrifice_BUFF);
 
 --Warnings
@@ -430,7 +431,7 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 					break;
 				end
 
-				if _Malevolence_RDY and _Corruption_DEBUFF then
+				if _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Corruption_DEBUFF and ConRO:FullMode(_Malevolence) then
 					tinsert(ConRO.SuggestedSpells, _Malevolence);
 					_Malevolence_RDY = false;
 					_Queue = _Queue + 1;
@@ -554,7 +555,7 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 					break;
 				end
 
-				if _Malevolence_RDY and _Corruption_DEBUFF then
+				if _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Corruption_DEBUFF and ConRO:FullMode(_Malevolence) then
 					tinsert(ConRO.SuggestedSpells, _Malevolence);
 					_Malevolence_RDY = false;
 					_Queue = _Queue + 1;
@@ -941,7 +942,9 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 		local _Havoc_DEBUFF = ConRO:AnyTargetAura(Debuff.Havoc);
 	local _Immolate, _Immolate_RDY = ConRO:AbilityReady(Ability.Immolate, timeShift);
 		local _Immolate_DEBUFF = ConRO:TargetAura(Debuff.Immolate, timeShift);
-	local _Incinerate, _Incinerate_RDY = ConRO:AbilityReady(Ability.Incinerate, timeShift);
+	local _Incinerate = ConRO:AbilityReady(Ability.Incinerate, timeShift);
+		local _Incinerate_RDY = true;
+	local _Malevolence, _Malevolence_RDY = ConRO:AbilityReady(Ability.Malevolence, timeShift);
 	local _RainofFire, _RainofFire_RDY = ConRO:AbilityReady(Ability.RainofFire, timeShift);
 	local _Shadowburn, _Shadowburn_RDY = ConRO:AbilityReady(Ability.Shadowburn, timeShift);
 		local _Shadowburn_CHARGES = ConRO:SpellCharges(_Shadowburn);
@@ -995,7 +998,8 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 	ConRO:AbilityPurge(_DevourMagic, _DevourMagic_RDY and ConRO:Purgable());
 	ConRO:AbilityPurge(_ArcaneTorrent, _ArcaneTorrent_RDY and _target_in_melee and ConRO:Purgable());
 
-	ConRO:AbilityBurst(_SummonInfernal, _SummonInfernal_RDY and _in_combat and ConRO:BurstMode(_SummonInfernal));
+	ConRO:AbilityBurst(_Malevolence, _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Immolate_DEBUFF and ConRO:BurstMode(_Malevolence, 60));
+	ConRO:AbilityBurst(_SummonInfernal, _SummonInfernal_RDY and ConRO:BurstMode(_SummonInfernal));
 	ConRO:AbilityBurst(_GrimoireofSacrifice, _GrimoireofSacrifice_RDY and not _GrimoireofSacrifice_BUFF);
 
 --Warnings
@@ -1016,8 +1020,9 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 					break;
 				end
 
-				if currentSpell ~= _Incinerate and not _SoulFire_RDY and currentSpell ~= _SoulFire then
+				if _Incinerate_RDY and not _SoulFire_RDY and currentSpell ~= _SoulFire then
 					tinsert(ConRO.SuggestedSpells, _Incinerate);
+					_Incinerate_RDY = false;
 					if tChosen[Ability.DiabolicEmbers.talentID] then
 						_SoulShards = _SoulShards + 0.4;
 					else
@@ -1055,6 +1060,13 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 				if not _Immolate_DEBUFF and currentSpell ~= _SoulFire and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and not _is_moving then
 					tinsert(ConRO.SuggestedSpells, _Immolate);
 					_Immolate_DEBUFF = true;
+					_Queue = _Queue + 1;
+					break;
+				end
+
+				if _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Immolate_DEBUFF and ConRO:FullMode(_Malevolence, 60) then
+					tinsert(ConRO.SuggestedSpells, _Malevolence);
+					_Malevolence_RDY = false;
 					_Queue = _Queue + 1;
 					break;
 				end
@@ -1108,19 +1120,28 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 					break;
 				end
 
-				tinsert(ConRO.SuggestedSpells, _Incinerate);
-				if tChosen[Ability.DiabolicEmbers.talentID] then
-					_SoulShards = _SoulShards + 0.4;
-				else
-					_SoulShards = _SoulShards + 0.2;
+				if _Incinerate_RDY then
+					tinsert(ConRO.SuggestedSpells, _Incinerate);
+					if tChosen[Ability.DiabolicEmbers.talentID] then
+						_SoulShards = _SoulShards + 0.4;
+					else
+						_SoulShards = _SoulShards + 0.2;
+					end
+					_BackDraft_COUNT = _BackDraft_COUNT - 1;
+					_Queue = _Queue + 1;
+					break;
 				end
-				_BackDraft_COUNT = _BackDraft_COUNT - 1;
-				_Queue = _Queue + 1;
-				break;
 			else
 				if not _Immolate_DEBUFF and currentSpell ~= _SoulFire and currentSpell ~= _Cataclysm and currentSpell ~= _Immolate and currentSpell ~= _SoulFire then
 					tinsert(ConRO.SuggestedSpells, _Immolate);
 					_Immolate_DEBUFF = true;
+					_Queue = _Queue + 1;
+					break;
+				end
+
+				if _Malevolence_RDY and ConRO:HeroSpec(HeroSpec.Hellcaller) and _Immolate_DEBUFF and ConRO:FullMode(_Malevolence, 60) then
+					tinsert(ConRO.SuggestedSpells, _Malevolence);
+					_Malevolence_RDY = false;
 					_Queue = _Queue + 1;
 					break;
 				end
@@ -1213,15 +1234,17 @@ function ConRO.Warlock.Destruction(_, timeShift, currentSpell, gcd, tChosen, pvp
 					break;
 				end
 
-				tinsert(ConRO.SuggestedSpells, _Incinerate);
-				if tChosen[Ability.DiabolicEmbers.talentID] then
-					_SoulShards = _SoulShards + 0.4;
-				else
-					_SoulShards = _SoulShards + 0.2;
+				if _Incinerate_RDY then
+					tinsert(ConRO.SuggestedSpells, _Incinerate);
+					if tChosen[Ability.DiabolicEmbers.talentID] then
+						_SoulShards = _SoulShards + 0.4;
+					else
+						_SoulShards = _SoulShards + 0.2;
+					end
+					_BackDraft_COUNT = _BackDraft_COUNT - 1;
+					_Queue = _Queue + 1;
+					break;
 				end
-				_BackDraft_COUNT = _BackDraft_COUNT - 1;
-				_Queue = _Queue + 1;
-				break;
 			end
 
 			tinsert(ConRO.SuggestedSpells, 289603); --Waiting Spell Icon
