@@ -280,6 +280,10 @@ function ConRO.Warlock.Affliction(_, timeShift, currentSpell, gcd, tChosen, pvpC
 		_SoulShards = _SoulShards - 1;
 	end
 
+	if tChosen[Ability.DrainSoul.talentID] then
+		_ShadowEmbrace_DEBUFF, _ShadowEmbrace_COUNT, _ShadowEmbrace_DUR = ConRO:TargetAura(Debuff.ShadowEmbraceDS, timeShift);
+	end
+
 	if currentSpell == _ShadowBolt or (tChosen[Ability.ImprovedHaunt.talentID] and currentSpell == _Haunt) then
 		_ShadowEmbrace_COUNT = _ShadowEmbrace_COUNT + 1;
 		_ShadowEmbrace_DEBUFF = true;
