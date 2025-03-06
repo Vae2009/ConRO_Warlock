@@ -1,44 +1,23 @@
 local ConRO_Warlock, ids = ...;
 
 --Generic
-	ids.Racial = {
-		AncestralCall = {spellID = 274738},
-		ArcanePulse = {spellID = 260364},
-		ArcaneTorrent = {spellID = 50613},
-		Berserking = {spellID = 26297},
-		Cannibalize = {spellID = 20577},
-	}
-	ids.HeroSpec = {
-		SoulHarvester = 57,
-		Hellcaller = 58,
-		Diabolist = 59,
-	}
+ids.racial = {
+	AncestralCall = {spellID = 274738},
+	ArcanePulse = {spellID = 260364},
+	ArcaneTorrent = {spellID = 50613},
+	Berserking = {spellID = 26297},
+	Cannibalize = {spellID = 20577},
+}
+ids.hero_spec = {
+	SoulHarvester = 57,
+	Hellcaller = 58,
+	Diabolist = 59,
+}
 
---Warlock
-	ids.Warlock_Ability = {
-		DrainLife = {spellID = 234153},
-		Corruption = {spellID = 172},
-		CreateHealthstone = {spellID = 6201},
-			Healthstone = 5512,
-		CurseofWeakness = {spellID = 702},
-		Fear = {spellID = 5782},
-		HealthFunnel = {spellID = 755},
-		ShadowBolt = {spellID = 686},
-		SummonDemon = {spellID = 10},
-			SummonImp = {spellID = 688},
-			SummonVoidwalker = {spellID = 697},
-		UnendingResolve = {spellID = 104773},
-	}
-	ids.Warlock_Passive = {
-		SoulShards = 246985,
-	}
-	ids.Warlock_Debuff = {
-		Corruption = 146739,
-	}
-
---Affliction
-	ids.Aff_Ability = {
-	--Warlock Baseline
+ids.affliction = {
+	ability = {
+	--Baseline
+		Agony = {spellID = 980},
 		CommandDemon = {
 			CauterizeMaster = {spellID = 119905}, --Imp
 			Suffering = {spellID = 119907}, --Voidwalker
@@ -58,6 +37,7 @@ local ConRO_Warlock, ids = ...;
 			CreateSoulwell = {spellID = 29893},
 			Use = 5512,
 		},
+		MaleficRapture = {spellID = 324536},
 		RitualofDoom = {spellID = 342601},
 		RitualofSummoning = {spellID = 698},
 		ShadowBolt = {spellID = 686},
@@ -72,15 +52,11 @@ local ConRO_Warlock, ids = ...;
 		},
 		UnendingBreath = {spellID = 5697},
 		UnendingResolve = {spellID = 104773},
-		--Passive
-		SoulShards = {spellID = 246985},
-	--Affliction Baseline
-		Agony = {spellID = 980},
-		MaleficRapture = {spellID = 324536},
-		--Passive
+	--Passive
 		MasteryPotentAfflictions = {spellID = 77215},
+		SoulShards = {spellID = 246985},
 		XavianTeachings = {spellID = 317031},
-	--Warlock
+	--Warlock Talents
 		FelDomination = {spellID = 333889, talentID = 91439},
 		SoulLeech = {spellID = 108370, talentID = 91441},
 		BurningRush = {spellID = 111400, talentID = 91460},
@@ -132,7 +108,7 @@ local ConRO_Warlock, ids = ...;
 			DemonicHealthstone = {spellID = 224464, talentID = 91434},
 		SoulConduit = {spellID = 215941, talentID = 91427},
 		Soulburn = {spellID = 385899, talentID = 91469},
-	--Affliction
+	--Affliction Talents
 		UnstableAffliction = {spellID = 316099, talentID = 91570},
 		WritheinAgony = {spellID = 196102, talentID = 91569},
 		SeedofCorruption = {spellID = 27243, talentID = 91571},
@@ -175,7 +151,7 @@ local ConRO_Warlock, ids = ...;
 		DarkHarvest = {spellID = 387016, talentID = 126062},
 		RavenousAfflictions = {spellID = 459440, talentID = 126303},
 		MaleficTouch = {spellID = 458029, talentID = 126063},
-	--Hero
+	--Hero Talents
 	--Hellcaller
 		Wither = {spellID = 445468, talentID = 117437},
 		XalansFerocity = {spellID = 440044, talentID = 117450},
@@ -206,8 +182,8 @@ local ConRO_Warlock, ids = ...;
 		Quietus = {spellID = 449634, talentID = 117443},
 		SataielsVolition = {spellID = 449637, talentID = 117435},
 		ShadowofDeath = {spellID = 449638, talentID = 117454},
-	}
-	ids.Aff_PvPTalent = {
+	},
+	pvp_talent = {
 		BaneofFragility = {spellID = 199954},
 		Deathbolt = {spellID = 264106},
 		GatewayMastery = {spellID = 248855},
@@ -220,18 +196,15 @@ local ConRO_Warlock, ids = ...;
 		AmplifyCurse = {spellID = 328774},
 		RampantAfflictions = {spellID = 335052},
 			UnstableAfflictionRA = {spellID = 342938, talentID = 335052},
-	}
-	ids.Aff_Form = {
-
-	}
-	ids.Aff_Buff = {
+	},
+	buff = {
 		BurningRush = 111400,
 		DarkPact = 108416,
 		GrimoireofSacrifice = 196099,
 		Nightfall = 264571,
 		TormentedCrescendo = 387079,
-	}
-	ids.Aff_Debuff = {
+	},
+	debuff = {
 		Agony = 980,
 		Corruption = 146739,
 		DrainSoul = 198590,
@@ -244,8 +217,8 @@ local ConRO_Warlock, ids = ...;
 		UnstableAfflictionRA = 342938,
 		VileTaint = 278350,
 		Wither = 445474,
-	}
-	ids.Aff_PetAbility = {
+	},
+	pet_ability = {
 		CauterizeMaster = {spellID = 119899}, --Imp
 		Suffering = {spellID = 17735}, --Voidwalker
 		Whiplash = {spellID = 6360}, --Succubus
@@ -255,11 +228,12 @@ local ConRO_Warlock, ids = ...;
 		ThreateningPresence = {spellID = 112042}, -- Voidwalker
 		Felstorm = {spellID = 89751}, -- Felguard
 		AxeToss = {spellID = 89766},
-	}
+	},
+}
 
---Demonology
-	ids.Demo_Ability = {
-	--Warlock Baseline
+ids.demonology = {
+	ability = {
+	--Baseline
 		CommandDemon = {
 			SingeMagic = {spellID = 119905}, --Imp
 			Suffering = {spellID = 119907}, --Voidwalker
@@ -274,6 +248,7 @@ local ConRO_Warlock, ids = ...;
 		DrainLife = {spellID = 234153},
 		EyeofKilrogg = {spellID = 126},
 		Fear = {spellID = 5782},
+		HandofGuldan = {spellID = 105174},
 		HealthFunnel = {spellID = 755},
 		Healthstone = {
 			Create = {spellID = 6201},
@@ -294,12 +269,9 @@ local ConRO_Warlock, ids = ...;
 		},
 		UnendingBreath = {spellID = 5697},
 		UnendingResolve = {spellID = 104773},
-		--Passive
-		SoulShards = {spellID = 246985},
-	--Demonology Baseline
-		HandofGuldan = {spellID = 105174},
-		--Passive
+	--Passive
 		MasteryMasterDemonologist = {spellID = 77219},
+		SoulShards = {spellID = 246985},
 	--Warlock
 		FelDomination = {spellID = 333889, talentID = 91439},
 		SoulLeech = {spellID = 108370, talentID = 91441},
@@ -436,8 +408,8 @@ local ConRO_Warlock, ids = ...;
 		Quietus = {spellID = 449634, talentID = 117443},
 		SataielsVolition = {spellID = 449637, talentID = 117435},
 		ShadowofDeath = {spellID = 449638, talentID = 117454},
-	}
-	ids.Demo_PvPTalent = {
+	},
+	pvp_talent = {
 		SingeMagic = 212623,
 		CallFelhunter = 212619,
 		PleasureThroughPain = 212618,
@@ -450,21 +422,18 @@ local ConRO_Warlock, ids = ...;
 		NetherWard = 212295,
 		EssenceDrain = 221711,
 		CastingCircle = 221703,
-	}
-	ids.Demo_Form = {
-
-	}
-	ids.Demo_Buff = {
+	},
+	buff = {
 		BurningRush = 111400,
 		DarkPact = 108416,
 		DemonicCalling = 205146,
 		DemonicCore = 264173,
-	}
-	ids.Demo_Debuff = {
+	},
+	debuff = {
 		Corruption = 146739,
 		Doom = 603,
-	}
-	ids.Demo_PetAbility = {
+	},
+	pet_ability = {
 		CauterizeMaster = {spellID = 119899}, --Imp
 		Suffering = {spellID = 17735}, --Voidwalker
 		Whiplash = {spellID = 6360}, --Succubus
@@ -477,10 +446,11 @@ local ConRO_Warlock, ids = ...;
 		AxeToss = {spellID = 89766}, -- Felguard
 		SoulStrike = {spellID = 267964, talentID = 91538}, -- Felguard
 	}
+}
 
---Destruction
-	ids.Dest_Ability = {
-	--Warlock Baseline
+ids.destruction = {
+	ability = {
+	--Baseline
 		CommandDemon = {
 			CauterizeMaster = {spellID = 119905}, --Imp
 			Suffering = {spellID = 119907}, --Voidwalker
@@ -489,6 +459,7 @@ local ConRO_Warlock, ids = ...;
 			ShadowLock = {spellID = 171140}, --Doomguard
 			MeteorStrike = {spellID = 171152}, --Infernal
 		},
+		ChaosBolt = {spellID = 116858},
 		CurseofWeakness = {spellID = 702},
 		DrainLife = {spellID = 234153},
 		EyeofKilrogg = {spellID = 126},
@@ -514,13 +485,10 @@ local ConRO_Warlock, ids = ...;
 		},
 		UnendingBreath = {spellID = 5697},
 		UnendingResolve = {spellID = 104773},
-		--Passive
-		SoulShards = {spellID = 246985},
-	--Destruction Baseline
-		ChaosBolt = {spellID = 116858},
-		--Passive
+	--Passive
 		MasteryChaoticEnergies = {spellID = 77220},
-	--Warlock
+		SoulShards = {spellID = 246985},
+	--Warlock Talents
 		FelDomination = {spellID = 333889, talentID = 91439},
 		SoulLeech = {spellID = 108370, talentID = 91441},
 		BurningRush = {spellID = 111400, talentID = 91460},
@@ -572,7 +540,7 @@ local ConRO_Warlock, ids = ...;
 			DemonicHealthstone = {spellID = 224464, talentID = 91434},
 		SoulConduit = {spellID = 215941, talentID = 91427},
 		Soulburn = {spellID = 385899, talentID = 91469},
-	--Destruction
+	--Destruction Talents
 		Conflagrate = {spellID = 17962, talentID = 91591},
 		Backdraft = {spellID = 196406, talentID = 91590},
 		RainofFire = {spellID = 5740, talentID = 91592},
@@ -592,7 +560,11 @@ local ConRO_Warlock, ids = ...;
 		SummonersEmbrace = {spellID = 453105, talentID = 91484},
 		GrimoireofSacrifice = {spellID = 108503, talentID = 125618},
 		AshenRemains = {spellID = 387252, talentID = 91482},
-		ChannelDemonfire = {spellID = 196447, talentID = 91586},
+		demonfire_infusion = {
+			passiveID = 1214442,
+			talentID = 91586
+		},
+		ChannelDemonfire = {spellID = 196447, talentID = 128599},
 		BlisteringAtrophy = {spellID = 456939, talentID = 126006},
 		ConflagrationofChaos = {spellID = 387108, talentID = 91583},
 		Emberstorm = {spellID = 454744, talentID = 91584},
@@ -622,7 +594,7 @@ local ConRO_Warlock, ids = ...;
 		AvatarofDestruction = {spellID = 456975, talentID = 126008},
 		DimensionRipper = {spellID = 457025, talentID = 126012},
 		UnstableRifts = {spellID = 457064, talentID = 126493},
-	--Hero
+	--Hero Talents
 	--Diabolist
 		DiabolicRitual = {spellID = 428514, talentID = 117452},
 		ClovenSouls = {spellID = 428517, talentID = 117446},
@@ -655,25 +627,22 @@ local ConRO_Warlock, ids = ...;
 		SeedsofTheirDemise = {spellID = 440055, talentID = 117426},
 		MarkofPerotharn = {spellID = 440045, talentID = 117441},
 		Malevolence = {spellID = 442726, talentID = 117439},
-	}
-	ids.Dest_Form = {
-
-	}
-	ids.Dest_Buff = {
+	},
+	buff = {
 		BackDraft = 117828,
 		BurningRush = 111400,
 		DarkPact = 108416,
 		GrimoireofSacrifice = 196099,
 		RitualofRuin = 387157,
- 	}
-	ids.Dest_Debuff = {
+ 	},
+	debuff = {
 		Conflagrate = 265931,
 		Eradication = 196414,
 		Havoc = 80240,
 		Immolate = 157736,
 		Wither = 445474,
-	}
-	ids.Dest_PetAbility = {
+	},
+	pet_ability = {
 		CauterizeMaster = {spellID = 119899}, --Imp
 		Suffering = {spellID = 17735}, --Voidwalker
 		Whiplash = {spellID = 6360}, --Succubus
@@ -685,3 +654,4 @@ local ConRO_Warlock, ids = ...;
 		Felstorm = {spellID = 89751}, -- Felguard
 		AxeToss = {spellID = 89766},
 	}
+}
